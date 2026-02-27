@@ -19,7 +19,7 @@
         ],
         "jsx": "react",
         "jsxFactory": "h",
-        "types": ["jquery", "jqueryui"]
+        "types": ["jquery", "jqueryui", "@types/tampermonkey"]
     },
     "include": [
         "./src/*.d.ts",

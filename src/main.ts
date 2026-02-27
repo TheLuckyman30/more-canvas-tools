@@ -14,10 +14,10 @@ const describeFailure = errors.failureDescriber({
 });
 
 async function onStart() {
-    const token = process.env.CANVAS_TOKEN;
+    const token = GM_getValue('CANVAS_TOKEN');
     const info = await fetch("https://canvas.instructure.com/api/v1/courses/", {headers: {"Authorization": `Bearer ${token}`}});
     log.log(`${U.name} ${U.version} - Hello world!`)
-    log.log(await info.json())
+    console.log("These are your courses", await info.json())
 }
 
 userscripter.run({
