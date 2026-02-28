@@ -1,6 +1,6 @@
 .awcache/
 .userscripter-temp/
-
+.vscode
 
 # Logs
 logs

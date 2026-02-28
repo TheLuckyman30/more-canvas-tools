@@ -9,6 +9,7 @@ import { injectListUngradedButton } from "./reports/ungraded_report";
 import { injectRecentlyEnrolled } from "./reports/recently_enrolled";
 import { injectSearchButton } from "./utilities/search_menu";
 import { injectBulkAssignmentDatesButton } from "./utilities/bulk_dates_csv";
+import { injectModuleIndicator } from "./utilities/module_indicator";
 
 const OPERATIONS: ReadonlyArray<Operation<any>> = [
     operation({
@@ -96,6 +97,17 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
         },
         action: (e) => {
             injectBulkAssignmentDatesButton(e.moreSettingsDropdown);
+        },
+        deferUntil: DOMCONTENTLOADED
+    }),
+    operation({
+        description: "recolors modules to make it more obvious if they are published or unpublished",
+        condition: () => isOnCourseHome,
+        dependencies: {
+            moduleContainer: "#context_modules"
+        },
+        action: (e) => {
+            injectModuleIndicator(e.moduleContainer);
         },
         deferUntil: DOMCONTENTLOADED
     })
