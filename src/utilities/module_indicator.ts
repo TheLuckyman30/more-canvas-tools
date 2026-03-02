@@ -1,43 +1,35 @@
-import { Module } from "~src/canvas/interfaces";
+const UNPUBLISHED_COLOR = "red";
+const PUBLISHED_COLOR = "green";
 
-function colorPublishedModules(
-  publishedModules: Module[],
-  moduleContainer: HTMLElement,
-) {
-  const headers = publishedModules.map((m) => {
-    return $(moduleContainer).find(`#${m.id}`);
-  });
-  for (const header of headers) {
-    $(header[0]).css("background-color", "green");
+function modifyAssignments(assignments: JQuery<HTMLLIElement>) {
+  for (const assignment of assignments) {
+    const state = $(assignment)
+      .find("div.ig-admin > span[data-published]")
+      .attr("data-published");
+    if (state === "false") {
+      $(assignment)
+        .children("div.ig-row")
+        .css("border-left", `3px solid ${UNPUBLISHED_COLOR}`);
+    }
   }
 }
 
-function colorUnpublishedModules(
-  unpublishedModules: Module[],
-  moduleContainer: HTMLElement,
-) {
-  const headers = unpublishedModules.map((m) => {
-    return $(moduleContainer).find(`#${m.id}`);
-  });
+function modifyModules(modules: JQuery<HTMLElement>, color: string) {
+  for (const module of modules) {
+    $(module).children(".ig-header").css("background-color", color);
 
-  for (const header of headers) {
-    $(header[0]).css("background-color", "red");
+    const assignmentList = $(module).find("div.content > ul.ig-list")[0];
+    const assignments = $(assignmentList).children("li");
+    modifyAssignments(assignments);
   }
 }
 
 export async function injectModuleIndicator(target: HTMLElement) {
-  const token = GM_getValue("CANVAS_TOKEN");
-  const response = await fetch(
-    "https://canvas.instructure.com/api/v1/courses/14264155/modules",
-    { headers: { Authorization: `Bearer ${token}` } },
+  const unpublishedModules = $(target).children(
+    '[data-workflow-state="unpublished"]',
   );
-  const allModules: Module[] = await response.json();
-  const publishedModules: Module[] = [];
-  const unpublishedModules = allModules.filter((m) => {
-    if (!m.published) return m;
-    publishedModules.push(m);
-  });
+  const publishedModules = $(target).children('[data-workflow-state="active"]');
 
-  colorUnpublishedModules(unpublishedModules, target);
-  colorPublishedModules(publishedModules, target);
+  modifyModules(unpublishedModules, UNPUBLISHED_COLOR);
+  modifyModules(publishedModules, PUBLISHED_COLOR);
 }
