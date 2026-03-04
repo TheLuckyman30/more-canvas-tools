@@ -12,7 +12,7 @@ const CLOSE_BUTTON = `
 
 const WARNING_BOX_HTML = `
 <div id="warning-box" 
-     style="position: fixed; background-color: #E5E7EB; height: 150px; right: 0; bottom: 0; width: 400px; z-index: 99; border: 2px solid red; border-radius: 0.375rem; padding: 0.5rem;">
+     style="position: fixed; background-color: #ffffff; height: 150px; right: 0; bottom: 0; width: 400px; z-index: 99; border-left: 6px solid ${UNPUBLISHED_COLOR}; border-radius: 0.375rem; padding: 0.5rem; box-shadow: 10px 20px 30px rgba(0, 0, 0, 0.24);">
   <div id="warning-header" style="display: flex; justify-content: space-between; font-size: 1.5rem">
     <div>Warning</div>
     ${CLOSE_BUTTON}
@@ -20,6 +20,9 @@ const WARNING_BOX_HTML = `
   <div style="margin-top: 1rem">
     There are one or more published assignments in unpublished modules
   </div>
+  <button style="margin-top: 1rem; background-color: ${UNPUBLISHED_COLOR}; border: none; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer" id="go-to-assignments" onclick="window.location.href='/courses/${window.location.pathname.split('/')[2]}/modules'">
+    Go to modules
+  </button>
 </div>
 `;
 
@@ -34,7 +37,7 @@ function modifyAssignments(
     if (state === "false") {
       $(assignment)
         .children("div.ig-row")
-        .css("border-left", `3px solid ${UNPUBLISHED_COLOR}`);
+        .css("border-left", `4px solid ${UNPUBLISHED_COLOR}`);
     }
     if (moduleState === "unpublished" && state === "true") {
       assignmentInUnpubMod = true;
