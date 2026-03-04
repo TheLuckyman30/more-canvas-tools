@@ -114,7 +114,7 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
   operation({
     description:
       "recolors modules to make it more obvious if they are published or unpublished",
-    condition: () => isOnCourseHome,
+    condition: () => true,
     dependencies: {
       moduleContainer: "#context_modules",
     },
