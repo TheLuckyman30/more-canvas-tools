@@ -1,6 +1,7 @@
-const UNPUBLISHED_COLOR = "red";
-const PUBLISHED_COLOR = "green";
+const UNPUBLISHED_COLOR = "#ffbdbd";
+const PUBLISHED_COLOR = "rgb(211, 241, 185)";
 let assignmentInUnpubMod = false;
+
 
 const CLOSE_BUTTON = `
 <div id="close-button"
@@ -11,7 +12,7 @@ const CLOSE_BUTTON = `
 
 const WARNING_BOX_HTML = `
 <div id="warning-box" 
-     style="position: absolute; background-color: #E5E7EB; height: 150px; right: 0; bottom: 0; width: 400px; z-index: 99; border: 2px solid red; border-radius: 0.375rem; padding: 0.5rem;">
+     style="position: fixed; background-color: #E5E7EB; height: 150px; right: 0; bottom: 0; width: 400px; z-index: 99; border: 2px solid red; border-radius: 0.375rem; padding: 0.5rem;">
   <div id="warning-header" style="display: flex; justify-content: space-between; font-size: 1.5rem">
     <div>Warning</div>
     ${CLOSE_BUTTON}
@@ -41,6 +42,25 @@ function modifyAssignments(
   }
 }
 
+function modifyButtons(buttons: JQuery<HTMLElement>, moduleState: string | undefined) {
+  console.log("Modifying buttons with module state: ", buttons);
+  for (const button of buttons) {
+    if ( moduleState === "unpublished") {
+      $(button)
+      .css("background-color", UNPUBLISHED_COLOR);
+    } else {
+      $(button)
+      .css("background-color", PUBLISHED_COLOR);
+    }
+  }
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 function modifyModules(modules: JQuery<HTMLElement>) {
   for (const module of modules) {
     const state = $(module).attr("data-workflow-state");
@@ -55,6 +75,16 @@ function modifyModules(modules: JQuery<HTMLElement>) {
     const assignmentList = $(module).find("div.content > ul.ig-list")[0];
     const assignments = $(assignmentList).children("li");
     modifyAssignments(assignments, state);
+
+    console.log("before");
+    sleep(1000).then(() => {
+      console.log("after");
+    const buttonAreas = $(module).find("div.module-publish-icon > span > span > button > span");
+    console.log("buttonAreas: ", buttonAreas);
+    modifyButtons(buttonAreas, state);
+    });
+    
+
   }
 }
 
