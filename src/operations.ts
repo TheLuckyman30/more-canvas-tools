@@ -24,6 +24,17 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
         deferUntil: DOMCONTENTLOADED,
     }),
     operation({
+        description: "provide button to warn about published assignments in unpublished modules",
+        condition: () => true ,
+        dependencies: {
+            moduleContainer: "#context_modules"
+        },
+        action: (e) => {
+            injectModuleIndicator(e.moduleContainer);
+        },
+        deferUntil: DOMCONTENTLOADED
+    }),
+    operation({
         description: "provide limit section enrollment button",
         condition: () => isOnPeoplePage,
         dependencies: {
