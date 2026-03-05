@@ -125,7 +125,7 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
     deferUntil: DOMCONTENTLOADED,
   }),
   operation({
-    description: "grade reminder",
+    description: "adds notification boxes for grade reminders",
     condition: () => true,
     dependencies: {
       mainContainer: "body",
@@ -136,8 +136,9 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
     deferUntil: DOMCONTENTLOADED,
   }),
   operation({
-    description: "add reminder button",
-    condition: () => true,
+    description:
+      "adds reminder button to speed grader and allow creation of reminders",
+    condition: () => isOnSpeedGrader,
     dependencies: {
       mainContainer: "body",
     },

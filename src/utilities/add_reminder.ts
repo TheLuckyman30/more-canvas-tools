@@ -1,4 +1,4 @@
-import { Reminder } from "~src/canvas/interfaces";
+import { CreateCalendarEvent, Reminder } from "~src/canvas/interfaces";
 
 const CLOSE_BUTTON = `
 <div id="mct-grader-close"
@@ -67,8 +67,31 @@ export async function injectAddReminder(target: HTMLElement) {
       const date = datePicker.val() as string;
 
       if (date) {
+        const token = GM_getValue("CANVAS_TOKEN");
+        const courseId = $('a[data-testid="course-link"]')
+          .attr("href")
+          ?.split("/")[2];
+
         const [year, month, day] = date.split("-").map((val) => Number(val));
         const newDate = new Date(year, month - 1, day).toLocaleDateString();
+
+        const newCalendarEvent: CreateCalendarEvent = {
+          calendar_event: {
+            context_code: `course_${courseId}`,
+            title: `Release Grades for ${assignmentName}`,
+            description: `Release Grades for ${assignmentName} in ${courseName}`,
+            all_day: true,
+            start_at: `${day}/${month}/${year}`,
+          },
+        };
+        fetch("https://canvas.instructure.com/api/v1/calendar_events", {
+          body: JSON.stringify(newCalendarEvent),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+        });
 
         const reminders: Reminder[] = JSON.parse(
           localStorage.getItem("mct-reminders") ?? "[]",

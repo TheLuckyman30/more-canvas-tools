@@ -142,6 +142,16 @@ export interface Submission {
   preview_url: string;
 }
 
+export interface CreateCalendarEvent {
+  calendar_event: {
+    context_code: string;
+    title: string;
+    description: string;
+    all_day: boolean;
+    start_at: string;
+  };
+}
+
 export interface Comment {
   author: User;
   author_id: number;
