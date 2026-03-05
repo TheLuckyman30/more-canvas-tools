@@ -70,8 +70,7 @@ function modifyModules(modules: JQuery<HTMLElement>) {
     if (state === "unpublished") {
       $(module)
         .children(".ig-header")
-        .css("background-color", UNPUBLISHED_COLOR)
-        .append("<div>Hello</div>");
+        .css("background-color", UNPUBLISHED_COLOR);
     } else {
       $(module).children(".ig-header").css("background-color", PUBLISHED_COLOR);
     }

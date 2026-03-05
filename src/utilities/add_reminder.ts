@@ -52,6 +52,10 @@ function sleep(ms: number) {
 export async function injectAddReminder(target: HTMLElement) {
   await sleep(2000);
   const topMenu = $('span[data-testid="student-navigation-container"]');
+  const courseName = $('span[data-testid="course-link-text"]').text();
+  const assignmentName = $('a[data-testid="assignment-link"]').text();
+
+  // Change top bar to a flexbox so it can contain the new reminder button
   $(topMenu).css({ display: "flex", "align-items": "center", gap: "20px" });
   $(topMenu).append(REMINDER_BUTTON_HTML);
 
@@ -71,8 +75,8 @@ export async function injectAddReminder(target: HTMLElement) {
         );
         reminders.push({
           targetDate: newDate,
-          courseName: "course",
-          assignmentName: "assignment",
+          courseName: courseName,
+          assignmentName: assignmentName,
         });
 
         localStorage.setItem("mct-reminders", JSON.stringify(reminders));
