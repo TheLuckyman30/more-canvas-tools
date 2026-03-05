@@ -25,6 +25,9 @@ const WARNING_BOX_HTML = `
 </div>
 `;
 
+const Indicator= `
+<div id="published-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> Unpublished </div>
+`;
 // Temp solution
 function sleep(ms: number) {
   return new Promise((resolve) => {
@@ -70,7 +73,11 @@ function modifyModules(modules: JQuery<HTMLElement>) {
     if (state === "unpublished") {
       $(module)
         .children(".ig-header")
-        .css("background-color", UNPUBLISHED_COLOR);
+        .css("background-color", UNPUBLISHED_COLOR)
+        .children(".prerequisites")
+        .append(Indicator);      
+        
+
     } else {
       $(module).children(".ig-header").css("background-color", PUBLISHED_COLOR);
     }
