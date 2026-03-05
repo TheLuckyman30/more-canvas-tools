@@ -75,7 +75,8 @@ function modifyModules(modules: JQuery<HTMLElement>) {
       $(module)
         .children(".ig-header")
         .css("background-color", UNPUBLISHED_COLOR)
-        .append(`<div style="margin-left: 0.5rem; font-size: 0.875rem; color: black; font-weight: bold;"> Unpublished </div>`);      
+        .children(".prerequisites")
+        .append(Indicator);      
         
 
     } else {
