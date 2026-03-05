@@ -8,6 +8,7 @@ import {
   isOnCourseHome,
   hasGlobalNavigation,
   isOnAssignmentList,
+  isOnDashboard,
 } from "./canvas/page_checks";
 import { loadUserActivityReport } from "./reports/user_activity";
 import { injectGraderLabel } from "./utilities/grader_label";
@@ -20,6 +21,7 @@ import { injectBulkAssignmentDatesButton } from "./utilities/bulk_dates_csv";
 import { injectModuleIndicator } from "./utilities/module_indicator";
 import { injectGradeReminder } from "./utilities/grade_reminder";
 import { injectAddReminder } from "./utilities/add_reminder";
+import { injectReminderSideBar } from "./utilities/reminder_sidebar";
 
 const OPERATIONS: ReadonlyArray<Operation<any>> = [
   operation({
@@ -153,6 +155,17 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
         childList: true,
         subtree: true,
       });
+    },
+    deferUntil: DOMCONTENTLOADED,
+  }),
+  operation({
+    description: "adds a sidebar to the dashboard showing all reminders",
+    condition: () => isOnDashboard,
+    dependencies: {
+      rightSidebar: "div#right-side-wrapper",
+    },
+    action: (e) => {
+      injectReminderSideBar(e.rightSidebar);
     },
     deferUntil: DOMCONTENTLOADED,
   }),
