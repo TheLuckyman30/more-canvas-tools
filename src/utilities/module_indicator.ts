@@ -2,7 +2,6 @@ const UNPUBLISHED_COLOR = "#ffbdbd";
 const PUBLISHED_COLOR = "rgb(211, 241, 185)";
 let assignmentInUnpubMod = false;
 
-
 const CLOSE_BUTTON = `
 <div id="close-button"
      style="cursor: pointer">
@@ -20,7 +19,7 @@ const WARNING_BOX_HTML = `
   <div style="margin-top: 1rem">
     There are one or more published assignments in unpublished modules
   </div>
-  <button style="margin-top: 1rem; background-color: ${UNPUBLISHED_COLOR}; border: none; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer" id="go-to-assignments" onclick="window.location.href='/courses/${window.location.pathname.split('/')[2]}/modules'">
+  <button style="margin-top: 1rem; background-color: ${UNPUBLISHED_COLOR}; border: none; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer" id="go-to-assignments" onclick="window.location.href='/courses/${window.location.pathname.split("/")[2]}/modules'">
     Go to modules
   </button>
 </div>
@@ -29,6 +28,12 @@ const WARNING_BOX_HTML = `
 const Indicator= `
 <div id="published-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> Unpublished </div>
 `;
+// Temp solution
+function sleep(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 
 function modifyAssignments(
   assignments: JQuery<HTMLLIElement>,
@@ -49,23 +54,18 @@ function modifyAssignments(
   }
 }
 
-function modifyButtons(buttons: JQuery<HTMLElement>, moduleState: string | undefined) {
+function modifyButtons(
+  buttons: JQuery<HTMLElement>,
+  moduleState: string | undefined,
+) {
   console.log("Modifying buttons with module state: ", buttons);
   for (const button of buttons) {
-    if ( moduleState === "unpublished") {
-      $(button)
-      .css("background-color", UNPUBLISHED_COLOR);
+    if (moduleState === "unpublished") {
+      $(button).css("background-color", UNPUBLISHED_COLOR);
     } else {
-      $(button)
-      .css("background-color", PUBLISHED_COLOR);
+      $(button).css("background-color", PUBLISHED_COLOR);
     }
   }
-}
-
-function sleep(ms: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
 }
 
 function modifyModules(modules: JQuery<HTMLElement>) {
@@ -87,15 +87,12 @@ function modifyModules(modules: JQuery<HTMLElement>) {
     const assignments = $(assignmentList).children("li");
     modifyAssignments(assignments, state);
 
-    console.log("before");
-    sleep(500).then(() => {
-      console.log("after");
-    const buttonAreas = $(module).find("div.module-publish-icon > span > span > button > span");
-    console.log("buttonAreas: ", buttonAreas);
-    modifyButtons(buttonAreas, state);
+    sleep(1000).then(() => {
+      const buttonAreas = $(module).find(
+        "div.module-publish-icon > span > span > button > span",
+      );
+      modifyButtons(buttonAreas, state);
     });
-    
-
   }
 }
 

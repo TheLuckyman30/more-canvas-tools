@@ -110,18 +110,10 @@ export interface Course {
   workflow_state: string;
 }
 
-export interface Module {
-  id: number;
-  position: number;
-  name: string;
-  unlock_at: Date | null;
-  require_sequential_progress: boolean;
-  requirement_type: string;
-  publish_final_grade: boolean;
-  prerequisite_module_ids: number[];
-  published: boolean;
-  items_count: number;
-  items_url: string;
+export interface Reminder {
+  targetDate: string;
+  courseName: string;
+  assignmentName: string;
 }
 
 export enum WorkflowState {
