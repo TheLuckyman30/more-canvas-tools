@@ -125,7 +125,7 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
     deferUntil: DOMCONTENTLOADED,
   }),
   operation({
-    description: "grade reminder",
+    description: "adds notification boxes for grade reminders",
     condition: () => true,
     dependencies: {
       mainContainer: "body",
@@ -136,13 +136,23 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
     deferUntil: DOMCONTENTLOADED,
   }),
   operation({
-    description: "add reminder button",
-    condition: () => true,
+    description:
+      "adds reminder button to speed grader and allow creation of reminders",
+    condition: () => isOnSpeedGrader,
     dependencies: {
-      mainContainer: "body",
+      topMenu: 'span[data-testid="student-navigation-container"]',
     },
     action: (e) => {
-      injectAddReminder(e.mainContainer);
+      const observer = new MutationObserver((__, obs) => {
+        if (e.topMenu) {
+          obs.disconnect();
+          injectAddReminder(e.topMenu);
+        }
+      });
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
     },
     deferUntil: DOMCONTENTLOADED,
   }),

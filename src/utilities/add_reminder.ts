@@ -1,4 +1,4 @@
-import { Reminder } from "~src/canvas/interfaces";
+import { CreateCalendarEvent, Reminder } from "~src/canvas/interfaces";
 
 const CLOSE_BUTTON = `
 <div id="mct-grader-close"
@@ -42,33 +42,47 @@ const INPUT_CONTAINER_HTML = `
 </div>
 `;
 
-// Temp solution
-function sleep(ms: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
-
 export async function injectAddReminder(target: HTMLElement) {
-  await sleep(2000);
-  const topMenu = $('span[data-testid="student-navigation-container"]');
   const courseName = $('span[data-testid="course-link-text"]').text();
   const assignmentName = $('a[data-testid="assignment-link"]').text();
 
   // Change top bar to a flexbox so it can contain the new reminder button
-  $(topMenu).css({ display: "flex", "align-items": "center", gap: "20px" });
-  $(topMenu).append(REMINDER_BUTTON_HTML);
+  $(target).css({ display: "flex", "align-items": "center", gap: "20px" });
+  $(target).append(REMINDER_BUTTON_HTML);
 
   $("div#mct-grader-reminder").on("click", () => {
-    $(target).append(INPUT_CONTAINER_HTML);
+    $("body").append(INPUT_CONTAINER_HTML);
 
     $("button#mct-submit-reminder").on("click", () => {
       const datePicker = $("input#mct-date-picker");
       const date = datePicker.val() as string;
 
       if (date) {
+        const token = GM_getValue("CANVAS_TOKEN");
+        const courseId = $('a[data-testid="course-link"]')
+          .attr("href")
+          ?.split("/")[2];
+
         const [year, month, day] = date.split("-").map((val) => Number(val));
         const newDate = new Date(year, month - 1, day).toLocaleDateString();
+
+        const newCalendarEvent: CreateCalendarEvent = {
+          calendar_event: {
+            context_code: `course_${courseId}`,
+            title: `Release Grades for ${assignmentName}`,
+            description: `Release Grades for ${assignmentName} in ${courseName}`,
+            all_day: true,
+            start_at: `${day}/${month}/${year}`,
+          },
+        };
+        fetch("https://canvas.instructure.com/api/v1/calendar_events", {
+          body: JSON.stringify(newCalendarEvent),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+        });
 
         const reminders: Reminder[] = JSON.parse(
           localStorage.getItem("mct-reminders") ?? "[]",
