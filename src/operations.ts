@@ -19,6 +19,7 @@ import { injectSearchButton } from "./utilities/search_menu";
 import { injectBulkAssignmentDatesButton } from "./utilities/bulk_dates_csv";
 import { injectModuleIndicator } from "./utilities/module_indicator";
 import { injectGradeReminder } from "./utilities/grade_reminder";
+import { injectAddReminder } from "./utilities/add_reminder";
 
 const OPERATIONS: ReadonlyArray<Operation<any>> = [
   operation({
@@ -131,6 +132,17 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
     },
     action: (e) => {
       injectGradeReminder(e.mainContainer);
+    },
+    deferUntil: DOMCONTENTLOADED,
+  }),
+  operation({
+    description: "add reminder button",
+    condition: () => true,
+    dependencies: {
+      topMenu: "body",
+    },
+    action: (e) => {
+      injectAddReminder();
     },
     deferUntil: DOMCONTENTLOADED,
   }),

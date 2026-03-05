@@ -55,7 +55,6 @@ function modifyButtons(
   buttons: JQuery<HTMLElement>,
   moduleState: string | undefined,
 ) {
-  console.log("Modifying buttons with module state: ", buttons);
   for (const button of buttons) {
     if (moduleState === "unpublished") {
       $(button).css("background-color", UNPUBLISHED_COLOR);
@@ -71,7 +70,8 @@ function modifyModules(modules: JQuery<HTMLElement>) {
     if (state === "unpublished") {
       $(module)
         .children(".ig-header")
-        .css("background-color", UNPUBLISHED_COLOR);
+        .css("background-color", UNPUBLISHED_COLOR)
+        .append("<div>Hello</div>");
     } else {
       $(module).children(".ig-header").css("background-color", PUBLISHED_COLOR);
     }

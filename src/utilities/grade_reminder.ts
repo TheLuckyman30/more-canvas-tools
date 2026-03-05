@@ -75,18 +75,18 @@ function getExpiredReminders() {
 }
 
 export function injectGradeReminder(target: HTMLElement) {
-  const reminder1: Reminder = {
-    targetDate: "3/3/2026",
-    courseName: "sus",
-    assignmentName: "test",
-  };
-  const reminder2: Reminder = {
-    targetDate: "3/4/2026",
-    courseName: "ssuss",
-    assignmentName: "testss",
-  };
+  // const reminder1: Reminder = {
+  //   targetDate: "3/3/2026",
+  //   courseName: "sus",
+  //   assignmentName: "test",
+  // };
+  // const reminder2: Reminder = {
+  //   targetDate: "3/4/2026",
+  //   courseName: "ssuss",
+  //   assignmentName: "testss",
+  // };
 
-  localStorage.setItem("mct-reminders", JSON.stringify([reminder1, reminder2]));
+  // localStorage.setItem("mct-reminders", JSON.stringify([reminder1, reminder2]));
 
   const expieredReminders = getExpiredReminders();
   if (expieredReminders.length) {
