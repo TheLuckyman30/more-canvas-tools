@@ -139,10 +139,10 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
     description: "add reminder button",
     condition: () => true,
     dependencies: {
-      topMenu: "body",
+      mainContainer: "body",
     },
     action: (e) => {
-      injectAddReminder();
+      injectAddReminder(e.mainContainer);
     },
     deferUntil: DOMCONTENTLOADED,
   }),
