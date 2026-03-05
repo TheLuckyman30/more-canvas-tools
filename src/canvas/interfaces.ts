@@ -111,6 +111,7 @@ export interface Course {
 }
 
 export interface Reminder {
+  id: number;
   targetDate: string;
   courseName: string;
   assignmentName: string;

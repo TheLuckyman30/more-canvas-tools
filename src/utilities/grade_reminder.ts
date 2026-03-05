@@ -65,13 +65,10 @@ function createReminderBox(
     const newReminders = reminders.splice(index, 1);
 
     if (!canDisplayNext && canDisplayPrev) {
-      console.log("here0");
       createReminderBox(newReminders, index - 1, newReminders.length);
     } else if (canDisplayNext) {
-      console.log("here1");
       createReminderBox(newReminders, index, newReminders.length);
     } else {
-      console.log("here2");
       $("div#mct-reminder-box").remove();
     }
   });
@@ -81,6 +78,11 @@ function getExpiredReminders() {
   const reminders: Reminder[] = JSON.parse(
     localStorage.getItem("mct-reminders") ?? "[]",
   );
+
+  if (!reminders.length) {
+    localStorage.setItem("mct-reminder-nextId", "0");
+  }
+
   const currentDate = new Date().getTime();
   const expiredReminders: Reminder[] = [];
   const remaingReminders: Reminder[] = [];
