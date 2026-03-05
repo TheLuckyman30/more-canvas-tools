@@ -79,10 +79,6 @@ function getExpiredReminders() {
     localStorage.getItem("mct-reminders") ?? "[]",
   );
 
-  if (!reminders.length) {
-    localStorage.setItem("mct-reminder-nextId", "0");
-  }
-
   const currentDate = new Date().getTime();
   const expiredReminders: Reminder[] = [];
   const remaingReminders: Reminder[] = [];
@@ -94,6 +90,10 @@ function getExpiredReminders() {
     } else {
       remaingReminders.push(reminder);
     }
+  }
+
+  if (!remaingReminders.length) {
+    localStorage.setItem("mct-reminder-nextId", "0");
   }
 
   localStorage.setItem("mct-reminders", JSON.stringify(remaingReminders));

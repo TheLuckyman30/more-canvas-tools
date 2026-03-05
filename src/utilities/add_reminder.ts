@@ -90,6 +90,7 @@ export async function injectAddReminder(target: HTMLElement) {
         );
         reminders.push({
           id: nextId,
+          url: `https://canvas.instructure.com/courses/${courseId}/gradebook`,
           targetDate: newDate,
           courseName: courseName,
           assignmentName: assignmentName,
