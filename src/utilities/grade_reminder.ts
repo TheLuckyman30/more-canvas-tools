@@ -24,7 +24,7 @@ function createReminderBox(
   index: number,
   length: number,
 ) {
-  const { courseName, assignmentName } = reminders[index];
+  const { courseName, assignmentName, url } = reminders[index];
   const canDisplayNext = index !== length - 1 && length > 1;
   const canDisplayPrev = index !== 0 && length > 1;
 
@@ -39,9 +39,12 @@ function createReminderBox(
       <div style="margin-top: 1rem">
         Release the grades for ${assignmentName} in ${courseName}
       </div>
-      <div style="display: flex">
-        ${canDisplayNext ? NEXT_BUTTON_HTML : ""}
+      <div style="display: flex; justify-content: space-between;">
+        <button>
+          <a href="${url}" target="_blank">Go To</a>
+        </button>
         ${canDisplayPrev ? PREV_BUTTON_HTML : ""}
+        ${canDisplayNext ? NEXT_BUTTON_HTML : ""}
       </div>
     </div>
   `;
@@ -62,16 +65,13 @@ function createReminderBox(
   }
 
   $("div#mct-reminder-close").on("click", () => {
-    const newReminders = reminders.splice(index, 1);
+    reminders.splice(index, 1);
 
     if (!canDisplayNext && canDisplayPrev) {
-      console.log("here0");
-      createReminderBox(newReminders, index - 1, newReminders.length);
+      createReminderBox(reminders, index - 1, reminders.length);
     } else if (canDisplayNext) {
-      console.log("here1");
-      createReminderBox(newReminders, index, newReminders.length);
+      createReminderBox(reminders, index, reminders.length);
     } else {
-      console.log("here2");
       $("div#mct-reminder-box").remove();
     }
   });
@@ -81,6 +81,7 @@ function getExpiredReminders() {
   const reminders: Reminder[] = JSON.parse(
     localStorage.getItem("mct-reminders") ?? "[]",
   );
+
   const currentDate = new Date().getTime();
   const expiredReminders: Reminder[] = [];
   const remaingReminders: Reminder[] = [];
@@ -92,6 +93,10 @@ function getExpiredReminders() {
     } else {
       remaingReminders.push(reminder);
     }
+  }
+
+  if (!remaingReminders.length) {
+    localStorage.setItem("mct-reminder-nextId", "0");
   }
 
   localStorage.setItem("mct-reminders", JSON.stringify(remaingReminders));

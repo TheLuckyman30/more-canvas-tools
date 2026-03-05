@@ -84,16 +84,20 @@ export async function injectAddReminder(target: HTMLElement) {
           method: "POST",
         });
 
+        let nextId = Number(localStorage.getItem("mct-reminder-nextId")) ?? 0;
         const reminders: Reminder[] = JSON.parse(
           localStorage.getItem("mct-reminders") ?? "[]",
         );
         reminders.push({
+          id: nextId,
+          url: `https://canvas.instructure.com/courses/${courseId}/gradebook`,
           targetDate: newDate,
           courseName: courseName,
           assignmentName: assignmentName,
         });
 
         localStorage.setItem("mct-reminders", JSON.stringify(reminders));
+        localStorage.setItem("mct-reminder-nextId", JSON.stringify(nextId + 1));
       }
 
       $("div#mct-input-container").remove();
