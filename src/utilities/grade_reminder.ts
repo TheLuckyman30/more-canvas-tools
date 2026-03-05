@@ -57,13 +57,13 @@ function getExpiredReminders() {
   const reminders: Reminder[] = JSON.parse(
     localStorage.getItem("mct-reminders") ?? "[]",
   );
-  const currentDate = new Date().toLocaleDateString();
+  const currentDate = new Date().getTime();
   const expiredReminders: Reminder[] = [];
   const remaingReminders: Reminder[] = [];
   for (const reminder of reminders) {
-    const targetDate = new Date(reminder.targetDate).toLocaleDateString();
+    const targetDate = new Date(reminder.targetDate).getTime();
 
-    if (targetDate === currentDate) {
+    if (targetDate <= currentDate) {
       expiredReminders.push(reminder);
     } else {
       remaingReminders.push(reminder);
@@ -76,7 +76,7 @@ function getExpiredReminders() {
 
 export function injectGradeReminder(target: HTMLElement) {
   const reminder1: Reminder = {
-    targetDate: "3/4/2026",
+    targetDate: "3/3/2026",
     courseName: "sus",
     assignmentName: "test",
   };
