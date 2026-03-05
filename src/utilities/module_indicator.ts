@@ -26,6 +26,10 @@ const WARNING_BOX_HTML = `
 </div>
 `;
 
+const Indicator= `
+<div id="published-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> Unpublished </div>
+`;
+
 function modifyAssignments(
   assignments: JQuery<HTMLLIElement>,
   moduleState: string | undefined,
@@ -70,7 +74,10 @@ function modifyModules(modules: JQuery<HTMLElement>) {
     if (state === "unpublished") {
       $(module)
         .children(".ig-header")
-        .css("background-color", UNPUBLISHED_COLOR);
+        .css("background-color", UNPUBLISHED_COLOR)
+        .append(`<div style="margin-left: 0.5rem; font-size: 0.875rem; color: black; font-weight: bold;"> Unpublished </div>`);      
+        
+
     } else {
       $(module).children(".ig-header").css("background-color", PUBLISHED_COLOR);
     }
@@ -80,7 +87,7 @@ function modifyModules(modules: JQuery<HTMLElement>) {
     modifyAssignments(assignments, state);
 
     console.log("before");
-    sleep(1000).then(() => {
+    sleep(500).then(() => {
       console.log("after");
     const buttonAreas = $(module).find("div.module-publish-icon > span > span > button > span");
     console.log("buttonAreas: ", buttonAreas);
