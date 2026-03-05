@@ -1,5 +1,12 @@
 import { Reminder } from "~src/canvas/interfaces";
 
+const CLOSE_BUTTON = `
+<div id="mct-reminder-close"
+     style="cursor: pointer">
+  X
+</div>
+`;
+
 const NEXT_BUTTON_HTML = `
 <button id="mct-next">
   Next
@@ -26,6 +33,8 @@ function createReminderBox(
         style="position: fixed; background-color: #E5E7EB; height: 150px; right: 0; bottom: 0; width: 400px; z-index: 99; border: 2px solid red; border-radius: 0.375rem; padding: 0.5rem;">
       <div id="reminder-header" style="display: flex; justify-content: space-between; font-size: 1.5rem">
         <div>Warning</div>
+        <div>${index + 1}/${length}</div>
+        ${CLOSE_BUTTON}
       </div>
       <div style="margin-top: 1rem">
         Release the grades for ${assignmentName} in ${courseName}
@@ -37,7 +46,7 @@ function createReminderBox(
     </div>
   `;
 
-  $("div#application > div#wrapper").remove("div#mct-reminder-box");
+  $("div#mct-reminder-box").remove();
   $("div#application > div#wrapper").append(newReminder);
 
   if (canDisplayNext) {
@@ -51,6 +60,21 @@ function createReminderBox(
       createReminderBox(reminders, index - 1, length);
     });
   }
+
+  $("div#mct-reminder-close").on("click", () => {
+    const newReminders = reminders.splice(index, 1);
+
+    if (!canDisplayNext && canDisplayPrev) {
+      console.log("here0");
+      createReminderBox(newReminders, index - 1, newReminders.length);
+    } else if (canDisplayNext) {
+      console.log("here1");
+      createReminderBox(newReminders, index, newReminders.length);
+    } else {
+      console.log("here2");
+      $("div#mct-reminder-box").remove();
+    }
+  });
 }
 
 function getExpiredReminders() {
