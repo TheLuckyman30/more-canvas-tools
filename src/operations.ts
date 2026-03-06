@@ -25,6 +25,8 @@ import { injectAddReminder } from "./utilities/add_reminder";
 import { injectReminderSideBar } from "./utilities/reminder_sidebar";
 import { injectAssignmentIndicator } from "./utilities/add_assignment_indicator";
 
+
+
 const OPERATIONS: ReadonlyArray<Operation<any>> = [
   operation({
     description: "provide user activity report button",
