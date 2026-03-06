@@ -1,4 +1,5 @@
 import { Reminder } from "~src/canvas/interfaces";
+const REMINDER_COLOR = "rgb(211, 241, 185)";
 
 const CLOSE_BUTTON = `
 <div id="mct-reminder-close"
@@ -8,13 +9,13 @@ const CLOSE_BUTTON = `
 `;
 
 const NEXT_BUTTON_HTML = `
-<button id="mct-next">
+<button id="mct-next" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; width: 6vw; border-radius: 0.375rem; cursor: pointer">
   Next
 </button>
 `;
 
 const PREV_BUTTON_HTML = `
-<button id="mct-prev">
+<button id="mct-prev" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; width: 6vw; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer">
   Prev
 </button>
 `;
@@ -30,17 +31,19 @@ function createReminderBox(
 
   const newReminder = `
     <div id="mct-reminder-box" 
-        style="position: fixed; background-color: #E5E7EB; height: 150px; right: 0; bottom: 0; width: 400px; z-index: 99; border: 2px solid red; border-radius: 0.375rem; padding: 0.5rem;">
+        style="position: fixed; background-color: #ffffff; height: 150px; right: 0; bottom: 0; width: 400px; z-index: 99; border-left: 6px solid ${REMINDER_COLOR}; border-radius: 0.375rem; padding: 0.5rem; box-shadow: 10px 20px 30px rgba(0, 0, 0, 0.24);">
       <div id="reminder-header" style="display: flex; justify-content: space-between; font-size: 1.5rem">
-        <div>Warning</div>
+        <div>Reminder</div>
         <div>${index + 1}/${length}</div>
         ${CLOSE_BUTTON}
       </div>
       <div style="margin-top: 1rem">
-        Release the grades for ${assignmentName} in ${courseName}
+        Release the grades for assignment: '${assignmentName}' in course: '${courseName}'
       </div>
-      <div style="display: flex; justify-content: space-between;">
-        <button>
+      <div style="display: flex; justify-content: space-between; align-items: center">
+
+        <button style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; 
+        border-radius: 0.375rem; cursor: pointer;  width: 6vw" id="go-to-assignment" >
           <a href="${url}" target="_blank">Go To</a>
         </button>
         ${canDisplayPrev ? PREV_BUTTON_HTML : ""}
