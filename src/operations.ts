@@ -23,9 +23,6 @@ import { injectModuleIndicator } from "./utilities/module_indicator";
 import { injectGradeReminder } from "./utilities/grade_reminder";
 import { injectAddReminder } from "./utilities/add_reminder";
 import { injectReminderSideBar } from "./utilities/reminder_sidebar";
-import { injectAssignmentIndicator } from "./utilities/add_assignment_indicator";
-
-
 
 const OPERATIONS: ReadonlyArray<Operation<any>> = [
   operation({
@@ -161,15 +158,6 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
     },
     action: (e) => {
       injectReminderSideBar(e.rightSidebar);
-    },
-    deferUntil: DOMCONTENTLOADED,
-  }),
-  operation({
-    description: "placeholder",
-    condition: () => isOnCourseHome || isOnCourseModules,
-    dependencies: {},
-    action: (e) => {
-      injectAssignmentIndicator();
     },
     deferUntil: DOMCONTENTLOADED,
   }),
