@@ -23,6 +23,8 @@ import { injectGradeReminder } from "./utilities/grade_reminder";
 import { injectAddReminder } from "./utilities/add_reminder";
 import { injectReminderSideBar } from "./utilities/reminder_sidebar";
 
+
+
 const OPERATIONS: ReadonlyArray<Operation<any>> = [
   operation({
     description: "provide user activity report button",
