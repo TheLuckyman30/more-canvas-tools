@@ -18,7 +18,7 @@ I develop on Chrome. I make no claims that it will work on anything else. It pro
 
 # Selin and Brandon's features!
 
-1. [Published/ Unpublished Indicators](#publishedunpublished-indicators): Makes it more obvious if modules and assignments in those modules are published or not, shows a warning notification if an unpublished module has a published assignments.
+1. [Published/ Unpublished Indicators](#published-and-unpublished-indicators): Makes it more obvious if modules and assignments in those modules are published or not, shows a warning notification if an unpublished module has a published assignments.
 2. [Release Grade Reminder](#release-grade-reminder): Reminder system built into the speedgrader to allow professors to schedule reminders about releasing grades
    
 # Features
@@ -31,7 +31,7 @@ We are always working on new features, but here's what we have so far:
 4. [List Ungraded Submissions](#list-ungraded-submissions): A tool to list all ungraded submissions in a course.
 5. [List Recently Enrolled Users](#list-recently-enrolled-users): A tool to list all users who have recently enrolled in a course.
 
-## Published/Unpublished indicators
+## Published and Unpublished indicators
 
 The published/ unpublished indicators allow users to easily tell which modules and assignments are published vs not published by color coding them red (unpublished) vs green (published) and marking modules as unpublished in their header. 
 A warning notification(s) shows up if user has published an assignment in an unpublished module- the notification takes them to the modules page. 
