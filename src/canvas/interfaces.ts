@@ -113,6 +113,7 @@ export interface Course {
 export interface Reminder {
   id: number;
   url: string;
+  calendarId: number;
   targetDate: string;
   courseName: string;
   assignmentName: string;
