@@ -93,6 +93,18 @@ function getExpiredReminders() {
 
     if (targetDate <= currentDate) {
       expiredReminders.push(reminder);
+
+      const token = GM_getValue("CANVAS_TOKEN");
+      fetch(
+        `https://canvas.instructure.com/api/v1/calendar_events/${reminder.calendarId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          method: "DELETE",
+        },
+      );
     } else {
       remaingReminders.push(reminder);
     }

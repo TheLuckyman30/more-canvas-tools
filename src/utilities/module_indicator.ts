@@ -36,6 +36,19 @@ function sleep(ms: number) {
   });
 }
 
+function modifyButtons(
+  buttons: JQuery<HTMLElement>,
+  moduleState: string | undefined,
+) {
+  for (const button of buttons) {
+    if (moduleState === "unpublished") {
+      $(button).css("background-color", UNPUBLISHED_COLOR);
+    } else {
+      $(button).css("background-color", PUBLISHED_COLOR);
+    }
+  }
+}
+
 function modifyAssignments(
   assignments: JQuery<HTMLLIElement>,
   moduleState: string | undefined,
@@ -51,19 +64,6 @@ function modifyAssignments(
     }
     if (moduleState === "unpublished" && state === "true") {
       assignmentInUnpubMod = true;
-    }
-  }
-}
-
-function modifyButtons(
-  buttons: JQuery<HTMLElement>,
-  moduleState: string | undefined,
-) {
-  for (const button of buttons) {
-    if (moduleState === "unpublished") {
-      $(button).css("background-color", UNPUBLISHED_COLOR);
-    } else {
-      $(button).css("background-color", PUBLISHED_COLOR);
     }
   }
 }

@@ -63,7 +63,6 @@ await sleep(2000)
   $(topMenu).css({ display: "flex", "align-items": "center", gap: "20px" });
   $(topMenu).append(REMINDER_BUTTON_HTML);
 
-
   $("div#mct-grader-reminder").on("click", () => {
     $("body").append(INPUT_CONTAINER_HTML);
 
@@ -73,9 +72,7 @@ await sleep(2000)
 
       if (date) {
         const token = GM_getValue("CANVAS_TOKEN");
-        const courseId = $('a[data-testid="course-link"]')
-          .attr("href")
-          ?.split("/")[2];
+        const courseId = window.location.pathname.split("/")[2];
 
         const [year, month, day] = date.split("-").map((val) => Number(val));
         const newDate = new Date(year, month - 1, day).toLocaleDateString();
