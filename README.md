@@ -36,7 +36,8 @@ We are always working on new features, but here's what we have so far:
 The published/ unpublished indicators allow users to easily tell which modules and assignments are published vs not published by color coding them red (unpublished) vs green (published) and marking modules as unpublished in their header. 
 A warning notification(s) shows up if user has published an assignment in an unpublished module- the notification takes them to the modules page. 
 
-[screenshot]
+<img src="docs/Indicators.png" title="indicators screenshot" >
+
 
 ## Release Grade Reminder
 
@@ -46,7 +47,9 @@ The release grade reminders is a workaround for the lack of a 'group release gra
 *  On the day/ past the day of the set reminder, it will give you a warning notification to unhide the grades with a button that takes you to the gradebook.
 *  Reminder also shows up on the dashboard on the right hand side bar
 
-  [screenshot]
+  <img src="docs/ReminderButton.png" title="reminder button in calendar" >
+  <img src="docs/ReminderNotif.png" title="unhide reminder notification and show that reminder is in calendar" >
+  <img src="docs/ReminderPopup.png" title="assign date to remind about unhiding assignment popup screenshot" >
 
 ## Activity Report
 
