@@ -145,16 +145,7 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
       topMenu: 'span[data-testid="student-navigation-container"]',
     },
     action: (e) => {
-      const observer = new MutationObserver((__, obs) => {
-        if (e.topMenu) {
-          obs.disconnect();
-          injectAddReminder(e.topMenu);
-        }
-      });
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-      });
+      injectAddReminder(e.topMenu);
     },
     deferUntil: DOMCONTENTLOADED,
   }),
