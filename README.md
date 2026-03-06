@@ -45,7 +45,7 @@ Known issues:
 * Users have to refresh the page to see indicators after editing/ creating a module
 * slight delay in color taking hold when page is opened
 
-<img src="docs/Indicators.png" title="indicators screenshot" >
+<img src="docs/UpdatedIndicators.png" title="indicators screenshot" >
 
 
 ## Release Grade Reminder
@@ -67,6 +67,8 @@ Known issues:
   <img src="docs/ReminderButton.png" title="reminder button in calendar" >
   <img src="docs/ReminderNotif.png" title="unhide reminder notification and show that reminder is in calendar" >
   <img src="docs/ReminderPopup.png" title="assign date to remind about unhiding assignment popup screenshot" >
+<img src="docs/sideBar.png" title="reminder sidebar" >
+
 
 ## Activity Report
 
