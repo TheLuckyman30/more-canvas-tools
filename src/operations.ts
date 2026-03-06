@@ -162,15 +162,6 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
     },
     deferUntil: DOMCONTENTLOADED,
   }),
-  operation({
-    description: "placeholder",
-    condition: () => isOnCourseHome || isOnCourseModules,
-    dependencies: {},
-    action: (e) => {
-      injectAssignmentIndicator();
-    },
-    deferUntil: DOMCONTENTLOADED,
-  }),
 ];
 
 export default OPERATIONS;
