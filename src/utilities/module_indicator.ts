@@ -64,10 +64,6 @@ function modifyAssignments(
       $(assignment)
         .children("div.ig-row")
         .css("border-left", `4px solid ${UNPUBLISHED_COLOR}`);
-
-      $(assignment).find("div.ig-admin").before(UNPUBLISHED_INDICATOR);
-    } else {
-      $(assignment).find("div.ig-admin").before(PUBLISHED_INDICATOR);
     }
     if (moduleState === "unpublished" && state === "true") {
       assignmentInUnpubMod = true;
