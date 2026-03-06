@@ -34,7 +34,9 @@ We are always working on new features, but here's what we have so far:
 ## Published and Unpublished indicators
 
 The published/ unpublished indicators allow users to easily tell which modules and assignments are published vs not published by color coding them red (unpublished) vs green (published) and marking modules as unpublished in their header. 
-A warning notification(s) shows up if user has published an assignment in an unpublished module- the notification takes them to the modules page. 
+A warning notification(s) shows up if user has published an assignment in an unpublished module- the notification takes them to the modules page.
+
+Currently being worked on: indicators if an assignment is published in the "Add Assignment" pop-up for modules 
 
 <img src="docs/Indicators.png" title="indicators screenshot" >
 
