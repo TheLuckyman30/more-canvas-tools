@@ -16,6 +16,11 @@ I develop on Chrome. I make no claims that it will work on anything else. It pro
 3. Visit the install link for the [More Canvas Tools userscript](https://ud-cis-teaching.github.io/more-canvas-tools/more-canvas-tools.user.js).
 4. You should be prompted to install the extension, which you should do.
 
+# Selin and Brandon's features!
+
+1. [Published/ Unpublished Indicators]: Makes it more obvious if modules and assignments in those modules are published or not, shows a warning notification if an unpublished module has a published assignments.
+2. [Release Grade Reminder]: Reminder system built into the speedgrader to allow professors to schedule reminders about releasing grades
+   
 # Features
 
 We are always working on new features, but here's what we have so far:
@@ -25,6 +30,23 @@ We are always working on new features, but here's what we have so far:
 3. [Spread Grade](#spread-grade): A particular tool for the speedgrader that replicates grades to other group members (based on email addresses found in the submitted Word document). Mostly only for courses that use Word Documents.
 4. [List Ungraded Submissions](#list-ungraded-submissions): A tool to list all ungraded submissions in a course.
 5. [List Recently Enrolled Users](#list-recently-enrolled-users): A tool to list all users who have recently enrolled in a course.
+
+## Published/Unpublished indicators
+
+The published/ unpublished indicators allow users to easily tell which modules and assignments are published vs not published by color coding them red (unpublished) vs green (published) and marking modules as unpublished in their header. 
+A warning notification(s) shows up if user has published an assignment in an unpublished module- the notification takes them to the modules page. 
+
+[screenshot]
+
+## Release Grade Reminder
+
+The release grade reminders is a workaround for the lack of a 'group release grade' feature- working alongside the existing 'hide grades' feature. 
+* It puts a button on the header of the speedgrader page that allows you to set a reminder to unhide the grades of the assignment the speedgrader is open for.
+*  It then adds the reminder as an event in the built in canvas calendar
+*  On the day/ past the day of the set reminder, it will give you a warning notification to unhide the grades with a button that takes you to the gradebook.
+*  Reminder also shows up on the dashboard on the right hand side bar
+
+  [screenshot]
 
 ## Activity Report
 
