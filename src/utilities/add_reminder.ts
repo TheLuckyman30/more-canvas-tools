@@ -53,7 +53,7 @@ export async function injectAddReminder(target: HTMLElement) {
   $("div#mct-grader-reminder").on("click", () => {
     $("body").append(INPUT_CONTAINER_HTML);
 
-    $("button#mct-submit-reminder").on("click", () => {
+    $("button#mct-submit-reminder").on("click", async () => {
       const datePicker = $("input#mct-date-picker");
       const date = datePicker.val() as string;
 
@@ -75,14 +75,18 @@ export async function injectAddReminder(target: HTMLElement) {
             start_at: `${day}/${month}/${year}`,
           },
         };
-        fetch("https://canvas.instructure.com/api/v1/calendar_events", {
-          body: JSON.stringify(newCalendarEvent),
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+        const response = await fetch(
+          "https://canvas.instructure.com/api/v1/calendar_events",
+          {
+            body: JSON.stringify(newCalendarEvent),
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            method: "POST",
           },
-          method: "POST",
-        });
+        );
+        const calEvent = await response.json();
 
         let nextId = Number(localStorage.getItem("mct-reminder-nextId")) ?? 0;
         const reminders: Reminder[] = JSON.parse(
@@ -91,6 +95,7 @@ export async function injectAddReminder(target: HTMLElement) {
         reminders.push({
           id: nextId,
           url: `https://canvas.instructure.com/courses/${courseId}/gradebook`,
+          calendarId: calEvent.id,
           targetDate: newDate,
           courseName: courseName,
           assignmentName: assignmentName,

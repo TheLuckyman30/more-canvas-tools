@@ -42,13 +42,40 @@ export function injectReminderSideBar(target: HTMLElement) {
     const reminderSection = $("div#mct-reminder-section-container");
     for (const reminder of reminders) {
       const reminderHtml = `
-        <div>
-            <div>${reminder.targetDate} - ${reminder.assignmentName}</div>
+        <div id="mct-reminder-${reminder.id}">
+            <div style="display: flex; justify-content: space-between">
+              <div>${reminder.targetDate} - ${reminder.assignmentName}</div>
+              <div id="mct-reminder-cancel-${reminder.id}" style="cursor: pointer">X</div>
+            </div>
             <div>${reminder.courseName}</div>
         </div>
       `;
 
       $(reminderSection).append(reminderHtml);
+      $(`div#mct-reminder-cancel-${reminder.id}`).on("click", () => {
+        const token = GM_getValue("CANVAS_TOKEN");
+        const newReminders = getActiveReminders().filter(
+          (r) => r.id !== reminder.id,
+        );
+        $(`div#mct-reminder-${reminder.id}`).remove();
+        localStorage.setItem("mct-reminders", JSON.stringify(newReminders));
+
+        fetch(
+          `https://canvas.instructure.com/api/v1/calendar_events/${reminder.calendarId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            method: "DELETE",
+          },
+        );
+
+        if (!newReminders.length) {
+          $(reminderSection).append(NO_REMINDER_HTML);
+          localStorage.setItem("mct-reminder-nextId", "0");
+        }
+      });
     }
   } else {
     $("div#mct-reminder-section-container").append(NO_REMINDER_HTML);
