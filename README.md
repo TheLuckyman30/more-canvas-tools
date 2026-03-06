@@ -18,8 +18,8 @@ I develop on Chrome. I make no claims that it will work on anything else. It pro
 
 # Selin and Brandon's features!
 
-1. [Published/ Unpublished Indicators]: Makes it more obvious if modules and assignments in those modules are published or not, shows a warning notification if an unpublished module has a published assignments.
-2. [Release Grade Reminder]: Reminder system built into the speedgrader to allow professors to schedule reminders about releasing grades
+1. [Published/ Unpublished Indicators](#published-and-unpublished-indicators): Makes it more obvious if modules and assignments in those modules are published or not, shows a warning notification if an unpublished module has a published assignments.
+2. [Release Grade Reminder](#release-grade-reminder): Reminder system built into the speedgrader to allow professors to schedule reminders about releasing grades
    
 # Features
 
@@ -31,10 +31,19 @@ We are always working on new features, but here's what we have so far:
 4. [List Ungraded Submissions](#list-ungraded-submissions): A tool to list all ungraded submissions in a course.
 5. [List Recently Enrolled Users](#list-recently-enrolled-users): A tool to list all users who have recently enrolled in a course.
 
-## Published/Unpublished indicators
+## Published and Unpublished indicators
 
-The published/ unpublished indicators allow users to easily tell which modules and assignments are published vs not published by color coding them red (unpublished) vs green (published) and marking modules as unpublished in their header. 
-A warning notification(s) shows up if user has published an assignment in an unpublished module- the notification takes them to the modules page. 
+* The published/ unpublished indicators allow users to easily tell which modules and assignments are published vs not published by color coding them red (unpublished) vs green (published) and marking modules as unpublished in their header. 
+*A warning notification(s) shows up if user has published an assignment in an unpublished module- the notification takes them to the modules page.
+
+Currently being worked on: 
+** indicators if an assignment is published in the "Add Assignment" pop-up for modules 
+** Specific information on which module warning is coming from in the warning popup
+
+Known issues:
+
+** Users have to refresh the page to see indicators after editing/ creating a module
+** slight delay in color taking hold when page is opened
 
 <img src="docs/Indicators.png" title="indicators screenshot" >
 
@@ -46,6 +55,14 @@ The release grade reminders is a workaround for the lack of a 'group release gra
 *  It then adds the reminder as an event in the built in canvas calendar
 *  On the day/ past the day of the set reminder, it will give you a warning notification to unhide the grades with a button that takes you to the gradebook.
 *  Reminder also shows up on the dashboard on the right hand side bar
+
+Currently being worked on:
+** Adding a specific time option in the calendar, instead of just date
+** UI tweaks for right-hand sidebar
+** Reminder notification doesnt disappear after reloading/ navigating to another page 
+
+Known issues:
+** set reminder button can have a delay to load
 
   <img src="docs/ReminderButton.png" title="reminder button in calendar" >
   <img src="docs/ReminderNotif.png" title="unhide reminder notification and show that reminder is in calendar" >
