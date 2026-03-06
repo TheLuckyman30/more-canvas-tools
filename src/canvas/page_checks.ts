@@ -1,10 +1,10 @@
 import * as SITE from "../site";
 
 function pathMatches(r: RegExp): boolean {
-    return r.test(document.location.pathname);
+  return r.test(document.location.pathname);
 }
 
-export const isOnPeoplePage = pathMatches(SITE.PATH.PEOPLE_PAGE)
+export const isOnPeoplePage = pathMatches(SITE.PATH.PEOPLE_PAGE);
 
 export const isOnSpeedGrader = pathMatches(SITE.PATH.SPEED_GRADER);
 
@@ -16,12 +16,17 @@ export const isOnAssignmentList = pathMatches(SITE.PATH.ASSIGNMENT_LIST);
 
 export const isOnCourseHome = pathMatches(SITE.PATH.COURSE_HOME);
 
+export const isOnCourseModules = pathMatches(SITE.PATH.COURSE_MODULES);
+
 export const isOnCourseList = pathMatches(SITE.PATH.ALL_COURSES);
 
 export const isOnDashboard = document.location.pathname === "/";
 
-export const isOnCanvaDocs = /canvadocs.instructure.com/.test(document.location.hostname);
+export const isOnCanvaDocs = /canvadocs.instructure.com/.test(
+  document.location.hostname,
+);
 
-export const hasLeftNavigation = !isOnSpeedGrader && !isOnCanvaDocs && !isOnDashboard && !isOnCourseList;
+export const hasLeftNavigation =
+  !isOnSpeedGrader && !isOnCanvaDocs && !isOnDashboard && !isOnCourseList;
 
 export const hasGlobalNavigation = !isOnCanvaDocs;

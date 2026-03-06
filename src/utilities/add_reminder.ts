@@ -42,13 +42,22 @@ const INPUT_CONTAINER_HTML = `
 </div>
 `;
 
+// Temp solution
+function sleep(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 export async function injectAddReminder(target: HTMLElement) {
+  sleep(1000);
+  const topMenu = $('span[data-testid="student-navigation-container"]');
   const courseName = $('span[data-testid="course-link-text"]').text();
   const assignmentName = $('a[data-testid="assignment-link"]').text();
 
   // Change top bar to a flexbox so it can contain the new reminder button
-  $(target).css({ display: "flex", "align-items": "center", gap: "20px" });
-  $(target).append(REMINDER_BUTTON_HTML);
+  $(topMenu).css({ display: "flex", "align-items": "center", gap: "20px" });
+  $(topMenu).append(REMINDER_BUTTON_HTML);
 
   $("div#mct-grader-reminder").on("click", () => {
     $("body").append(INPUT_CONTAINER_HTML);
@@ -59,9 +68,7 @@ export async function injectAddReminder(target: HTMLElement) {
 
       if (date) {
         const token = GM_getValue("CANVAS_TOKEN");
-        const courseId = $('a[data-testid="course-link"]')
-          .attr("href")
-          ?.split("/")[2];
+        const courseId = window.location.pathname.split("/")[2];
 
         const [year, month, day] = date.split("-").map((val) => Number(val));
         const newDate = new Date(year, month - 1, day).toLocaleDateString();
