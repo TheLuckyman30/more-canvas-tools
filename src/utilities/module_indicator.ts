@@ -25,8 +25,11 @@ const WARNING_BOX_HTML = `
 </div>
 `;
 
-const Indicator = `
+const UNPUBLISHED_INDICATOR = `
 <div id="published-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> Unpublished </div>
+`;
+const PUBLISHED_INDICATOR = `
+<div id="published-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> Published </div>
 `;
 
 // Temp solution
@@ -61,6 +64,10 @@ function modifyAssignments(
       $(assignment)
         .children("div.ig-row")
         .css("border-left", `4px solid ${UNPUBLISHED_COLOR}`);
+
+      $(assignment).find("div.ig-admin").before(UNPUBLISHED_INDICATOR);
+    } else {
+      $(assignment).find("div.ig-admin").before(PUBLISHED_INDICATOR);
     }
     if (moduleState === "unpublished" && state === "true") {
       assignmentInUnpubMod = true;
@@ -76,9 +83,13 @@ function modifyModules(modules: JQuery<HTMLElement>) {
         .children(".ig-header")
         .css("background-color", UNPUBLISHED_COLOR)
         .children(".prerequisites")
-        .append(Indicator);
+        .append(UNPUBLISHED_INDICATOR);
     } else {
-      $(module).children(".ig-header").css("background-color", PUBLISHED_COLOR);
+      $(module)
+        .children(".ig-header")
+        .css("background-color", PUBLISHED_COLOR)
+        .children(".prerequisites")
+        .append(PUBLISHED_INDICATOR);
     }
 
     const assignmentList = $(module).find("div.content > ul.ig-list")[0];
