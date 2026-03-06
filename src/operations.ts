@@ -151,6 +151,7 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
           injectAddReminder(e.topMenu);
         }
       });
+      console.log("Observing for top menu in speed grader to inject reminder button");
       observer.observe(document.body, {
         childList: true,
         subtree: true,
