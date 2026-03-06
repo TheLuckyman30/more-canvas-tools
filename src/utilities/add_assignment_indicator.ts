@@ -2,7 +2,7 @@ import { Assignment } from "~src/canvas/interfaces";
 
 async function modifyAssignments(assignmentsOnPage: JQuery<HTMLElement>) {
   const token = GM_getValue("CANVAS_TOKEN");
-  const courseId = $("a.mobile-header-title").attr("href")?.split("/")[2];
+  const courseId = window.location.pathname.split("/")[2];
   const response = await fetch(
     `https://canvas.instructure.com/api/v1/courses/${courseId}/assignments`,
     {

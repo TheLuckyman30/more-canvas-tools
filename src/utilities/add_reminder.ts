@@ -68,9 +68,7 @@ export async function injectAddReminder(target: HTMLElement) {
 
       if (date) {
         const token = GM_getValue("CANVAS_TOKEN");
-        const courseId = $('a[data-testid="course-link"]')
-          .attr("href")
-          ?.split("/")[2];
+        const courseId = window.location.pathname.split("/")[2];
 
         const [year, month, day] = date.split("-").map((val) => Number(val));
         const newDate = new Date(year, month - 1, day).toLocaleDateString();
