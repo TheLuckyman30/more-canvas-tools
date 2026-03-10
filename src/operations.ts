@@ -130,11 +130,9 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
   operation({
     description: "adds notification boxes for grade reminders",
     condition: () => true,
-    dependencies: {
-      mainContainer: "body",
-    },
-    action: (e) => {
-      injectGradeReminder(e.mainContainer);
+    dependencies: {},
+    action: () => {
+      injectGradeReminder();
     },
     deferUntil: DOMCONTENTLOADED,
   }),

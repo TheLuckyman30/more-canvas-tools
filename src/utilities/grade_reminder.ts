@@ -25,7 +25,7 @@ function createReminderBox(
   index: number,
   length: number,
 ) {
-  const { courseName, assignmentName, url } = reminders[index];
+  const { id, courseName, assignmentName, calendarId, url } = reminders[index];
   const canDisplayNext = index !== length - 1 && length > 1;
   const canDisplayPrev = index !== 0 && length > 1;
 
@@ -68,6 +68,30 @@ function createReminderBox(
   }
 
   $("div#mct-reminder-close").on("click", () => {
+    const storedReminders: Reminder[] = JSON.parse(
+      localStorage.getItem("mct-reminders") ?? "[]",
+    );
+    const newReminders = storedReminders.filter(
+      (reminder) => reminder.id !== id,
+    );
+
+    if (!newReminders.length) {
+      localStorage.setItem("mct-reminder-nextId", "0");
+    }
+    localStorage.setItem("mct-reminders", JSON.stringify(newReminders));
+
+    const token = GM_getValue("CANVAS_TOKEN");
+    fetch(
+      `https://canvas.instructure.com/api/v1/calendar_events/${calendarId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        method: "DELETE",
+      },
+    );
+
     reminders.splice(index, 1);
 
     if (!canDisplayNext && canDisplayPrev) {
@@ -87,38 +111,18 @@ function getExpiredReminders() {
 
   const currentDate = new Date().getTime();
   const expiredReminders: Reminder[] = [];
-  const remaingReminders: Reminder[] = [];
   for (const reminder of reminders) {
     const targetDate = new Date(reminder.targetDate).getTime();
 
     if (targetDate <= currentDate) {
       expiredReminders.push(reminder);
-
-      const token = GM_getValue("CANVAS_TOKEN");
-      fetch(
-        `https://canvas.instructure.com/api/v1/calendar_events/${reminder.calendarId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          method: "DELETE",
-        },
-      );
-    } else {
-      remaingReminders.push(reminder);
     }
   }
 
-  if (!remaingReminders.length) {
-    localStorage.setItem("mct-reminder-nextId", "0");
-  }
-
-  localStorage.setItem("mct-reminders", JSON.stringify(remaingReminders));
   return expiredReminders;
 }
 
-export function injectGradeReminder(target: HTMLElement) {
+export function injectGradeReminder() {
   const expieredReminders = getExpiredReminders();
   if (expieredReminders.length) {
     const startIndex = 0;
