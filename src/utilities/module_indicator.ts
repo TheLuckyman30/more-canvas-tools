@@ -36,16 +36,14 @@ const PUBLISHED_INDICATOR = `
 </div>
 `;
 
-function modifyButtons(
-  buttons: JQuery<HTMLElement>,
+function modifyButtonArea(
+  buttonArea: JQuery<HTMLElement>,
   moduleState: string | undefined,
 ) {
-  for (const button of buttons) {
-    if (moduleState === "unpublished") {
-      $(button).css("background-color", UNPUBLISHED_COLOR);
-    } else {
-      $(button).css("background-color", PUBLISHED_COLOR);
-    }
+  if (moduleState === "unpublished") {
+    $(buttonArea).css("background-color", UNPUBLISHED_COLOR);
+  } else {
+    $(buttonArea).css("background-color", PUBLISHED_COLOR);
   }
 }
 
@@ -54,16 +52,15 @@ function modifyAssignments(
   moduleState: string | undefined,
 ) {
   for (const assignment of assignments) {
-    const state = $(assignment)
-      .find("div.ig-admin > span[data-published]")
-      .attr("data-published");
-    if (state === "false") {
+    const state = $(assignment).find("div.ig-row").hasClass("ig-published");
+
+    if (!state) {
       $(assignment)
         .children("div.ig-row")
         .css("border-left", `4px solid ${UNPUBLISHED_COLOR}`);
-    }
-    if (moduleState === "unpublished" && state === "true") {
-      assignmentInUnpubMod = true;
+    } else {
+      $(assignment).children("div.ig-row").css("border-left", "");
+      if (moduleState === "unpublished") assignmentInUnpubMod = true;
     }
   }
 }
@@ -71,6 +68,7 @@ function modifyAssignments(
 function modifyModules(modules: JQuery<HTMLElement>) {
   for (const module of modules) {
     const state = $(module).attr("data-workflow-state");
+
     $(module).find("#mct-unpublished-indicator").remove();
     $(module).find("#mct-published-indicator").remove();
     $(module)
@@ -84,18 +82,19 @@ function modifyModules(modules: JQuery<HTMLElement>) {
 
     const assignmentList = $(module).find("div.content > ul.ig-list")[0];
     const assignments = $(assignmentList).children("li");
-    modifyAssignments(assignments, state);
-
-    const buttonAreas = $(module).find(
+    const buttonArea = $(module).find(
       "div.module-publish-icon > span > span > button > span",
     );
-    modifyButtons(buttonAreas, state);
+
+    modifyAssignments(assignments, state);
+    modifyButtonArea(buttonArea, state);
   }
 }
 
 export function injectModuleIndicator(target: HTMLElement) {
   const observer = new MutationObserver(() => {
     observer.disconnect();
+
     const modules = $(target).children("[data-workflow-state]");
     modifyModules(modules);
 
