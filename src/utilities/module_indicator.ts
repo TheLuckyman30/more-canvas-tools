@@ -58,7 +58,7 @@ function createWarningBox(
           ${CLOSE_BUTTON_HTML}
         </div>
         <div style="margin-top: 1rem">
-          ${moduleName} - ${assignmentName}
+          Assignment, <strong>${assignmentName}</strong>, is published. However it's module, <strong>${moduleName}</strong>, is unpublished.
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center">
           <button style="margin-top: 1rem; background-color: ${UNPUBLISHED_COLOR}; border: none; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer" id="go-to-assignments" onclick="window.location.href='/courses/${window.location.pathname.split("/")[2]}/modules'">
