@@ -1,6 +1,5 @@
 import { CreateCalendarEvent, Reminder } from "~src/canvas/interfaces";
 
-
 const CLOSE_BUTTON = `
 <div id="mct-grader-close"
      style="cursor: pointer; font-family: arial; color: #a1a1a1; font-size: 1.5rem">
@@ -53,8 +52,7 @@ function sleep(ms: number) {
 }
 
 export async function injectAddReminder(target: HTMLElement) {
-
-await sleep(2000)
+  await sleep(2000);
   const topMenu = $('span[data-testid="student-navigation-container"]');
   const courseName = $('span[data-testid="course-link-text"]').text();
   const assignmentName = $('a[data-testid="assignment-link"]').text();

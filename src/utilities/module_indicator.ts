@@ -3,14 +3,14 @@ const PUBLISHED_COLOR = "rgb(211, 241, 185)";
 let assignmentInUnpubMod = false;
 
 const CLOSE_BUTTON = `
-<div id="close-button"
+<div id="mct-close-button"
      style="cursor: pointer">
   X
 </div>
 `;
 
 const WARNING_BOX_HTML = `
-<div id="warning-box" 
+<div id="mct-warning-box" 
      style="position: fixed; background-color: #ffffff; height: 150px; right: 0; bottom: 0; width: 400px; z-index: 99; border-left: 6px solid ${UNPUBLISHED_COLOR}; border-radius: 0.375rem; padding: 0.5rem; box-shadow: 10px 20px 30px rgba(0, 0, 0, 0.24);">
   <div id="warning-header" style="display: flex; justify-content: space-between; font-size: 1.5rem">
     <div>Warning</div>
@@ -26,18 +26,15 @@ const WARNING_BOX_HTML = `
 `;
 
 const UNPUBLISHED_INDICATOR = `
-<div id="published-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> Unpublished </div>
+<div id="mct-unpublished-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> 
+  Unpublished 
+</div>
 `;
 const PUBLISHED_INDICATOR = `
-<div id="published-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> Published </div>
+<div id="mct-published-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> 
+  Published 
+</div>
 `;
-
-// Temp solution
-function sleep(ms: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
 
 function modifyButtons(
   buttons: JQuery<HTMLElement>,
@@ -74,41 +71,43 @@ function modifyAssignments(
 function modifyModules(modules: JQuery<HTMLElement>) {
   for (const module of modules) {
     const state = $(module).attr("data-workflow-state");
-    if (state === "unpublished") {
-      $(module)
-        .children(".ig-header")
-        .css("background-color", UNPUBLISHED_COLOR)
-        .children(".prerequisites")
-        .append(UNPUBLISHED_INDICATOR);
-    } else {
-      $(module)
-        .children(".ig-header")
-        .css("background-color", PUBLISHED_COLOR)
-        .children(".prerequisites")
-        .append(PUBLISHED_INDICATOR);
-    }
+    $(module).find("#mct-unpublished-indicator").remove();
+    $(module).find("#mct-published-indicator").remove();
+    $(module)
+      .children(".ig-header")
+      .css(
+        "background-color",
+        state === "active" ? PUBLISHED_COLOR : UNPUBLISHED_COLOR,
+      )
+      .children(".prerequisites")
+      .append(state === "active" ? PUBLISHED_INDICATOR : UNPUBLISHED_INDICATOR);
 
     const assignmentList = $(module).find("div.content > ul.ig-list")[0];
     const assignments = $(assignmentList).children("li");
     modifyAssignments(assignments, state);
 
-    sleep(1000).then(() => {
-      const buttonAreas = $(module).find(
-        "div.module-publish-icon > span > span > button > span",
-      );
-      modifyButtons(buttonAreas, state);
-    });
+    const buttonAreas = $(module).find(
+      "div.module-publish-icon > span > span > button > span",
+    );
+    modifyButtons(buttonAreas, state);
   }
 }
 
-export async function injectModuleIndicator(target: HTMLElement) {
-  const modules = $(target).children("[data-workflow-state]");
-  modifyModules(modules);
+export function injectModuleIndicator(target: HTMLElement) {
+  const observer = new MutationObserver(() => {
+    observer.disconnect();
+    const modules = $(target).children("[data-workflow-state]");
+    modifyModules(modules);
 
-  if (assignmentInUnpubMod) {
-    $("div#application > div#wrapper").append(WARNING_BOX_HTML);
-    $("#close-button").on("click", () => {
-      $("div#application > div#wrapper > div#warning-box").remove();
-    });
-  }
+    if (assignmentInUnpubMod) {
+      $("div#application > div#wrapper").append(WARNING_BOX_HTML);
+      $("#mct-close-button").on("click", () => {
+        $("div#application > div#wrapper > #mct-warning-box").remove();
+      });
+    }
+
+    observer.observe(target, { childList: true, subtree: true });
+  });
+
+  observer.observe(target, { childList: true, subtree: true });
 }
