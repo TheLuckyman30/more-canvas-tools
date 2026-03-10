@@ -12,42 +12,49 @@ async function modifyAssignments(assignmentsOnPage: JQuery<HTMLElement>) {
     },
   );
   const fetchedAssignments: Assignment[] = await response.json();
+  const newOptions: string[] = [];
 
   for (const assignment of assignmentsOnPage) {
-    const assignmentId = Number($(assignment).val());
+    const assingmentName = $(assignment).text().split("-")[0];
+    let assignmentId = Number($(assignment).val());
+    if (!assignmentId) {
+      assignmentId = Number($(assignment).attr("id"));
+    }
     const fetchedAssignment = fetchedAssignments.find(
       (a) => a.id === assignmentId,
     );
+    console.log(assignmentId);
 
     if (fetchedAssignment) {
-      if (fetchedAssignment.published) {
-        $(assignment).append("<div>-----Unpublished</div>");
-      } else {
-        $(assignment).append("<div>-----Published</div>");
-      }
+      const newOption = `
+        <div id="${assignmentId}" style="display: flex;">
+          <option value="${assignmentId}">${assingmentName}</option>
+          <div>-----${fetchedAssignment.published ? "Published" : "Unpublished"}</div>
+        </div>
+      `;
+      newOptions.push(newOption);
     }
   }
+
+  return newOptions;
 }
 
 export function injectAssignmentIndicator() {
   $("button.add_module_item_link").on("click", () => {
-    const observer = new MutationObserver(async (_, obs) => {
-      const target = $('div[aria-labelledby="ui-id-2"]');
-      if (target.length) {
-        obs.disconnect();
+    const observer = new MutationObserver(async () => {
+      const optionsGroup = $('optgroup[label="Assignments"]');
+      if (optionsGroup.length) {
+        observer.disconnect();
 
-        const assignmentsOnPage = $(target)
-          .find('optgroup[label="Assignments"]')
-          .children();
-        modifyAssignments(assignmentsOnPage);
-
-        $(target)
-          .find('button[aria-label="Close"]')
-          .on("click", () => {
-            $(target).remove();
-          });
+        const assignmentsOnPage = $(optionsGroup).children();
+        optionsGroup.children().remove();
+        console.log(optionsGroup);
+        const newOptions = await modifyAssignments(assignmentsOnPage);
+        for (const option of newOptions) {
+          optionsGroup.append(option);
+        }
       }
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe($("body")[0], { childList: true, subtree: true });
   });
 }
