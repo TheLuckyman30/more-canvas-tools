@@ -48,7 +48,6 @@ export function injectAssignmentIndicator() {
 
         const assignmentsOnPage = $(optionsGroup).children();
         optionsGroup.children().remove();
-        console.log(optionsGroup);
         const newOptions = await modifyAssignments(assignmentsOnPage);
         for (const option of newOptions) {
           optionsGroup.append(option);

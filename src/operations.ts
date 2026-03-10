@@ -163,7 +163,8 @@ const OPERATIONS: ReadonlyArray<Operation<any>> = [
     deferUntil: DOMCONTENTLOADED,
   }),
   operation({
-    description: "[placeholder]",
+    description:
+      "Adds pub/unpub indicators when adding assignments to a module",
     condition: () => isOnCourseHome || isOnCourseModules,
     dependencies: {},
     action: () => {
