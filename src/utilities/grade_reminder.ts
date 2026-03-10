@@ -122,7 +122,7 @@ function getExpiredReminders() {
   return expiredReminders;
 }
 
-export function injectGradeReminder(target: HTMLElement) {
+export function injectGradeReminder() {
   const expieredReminders = getExpiredReminders();
   if (expieredReminders.length) {
     const startIndex = 0;
