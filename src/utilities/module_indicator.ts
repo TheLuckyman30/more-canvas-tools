@@ -27,15 +27,19 @@ const PREV_BUTTON_HTML = `
 </button>
 `;
 
-const UNPUBLISHED_INDICATOR = `
+const UNPUBLISHED_INDICATOR_HTML = `
 <div id="mct-unpublished-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> 
   Unpublished 
 </div>
 `;
-const PUBLISHED_INDICATOR = `
+const PUBLISHED_INDICATOR_HTML = `
 <div id="mct-published-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> 
   Published 
 </div>
+`;
+
+const WARNING_CHECKBOX_HTML = `
+<input id="mct-warning-checkbox" type="checkbox" />
 `;
 
 function createWarningBox(
@@ -108,6 +112,7 @@ function modifyAssignments(
   assignments: JQuery<HTMLLIElement>,
   moduleState: string | undefined,
   moduleName: string,
+  moduleId: string,
   warnings: Map<string, Warning>,
 ) {
   for (const assignment of assignments) {
@@ -153,10 +158,12 @@ function modifyModules(
     );
     const moduleName =
       $(module).find("div.ig-header > span > span.name").attr("title") ?? "";
+    const moduleId = $(module).attr("data-module-id") ?? "";
 
     // Modify Module Header and label
     $(module).find("#mct-unpublished-indicator").remove();
     $(module).find("#mct-published-indicator").remove();
+    $(module).find("#mct-warning-checkbox").remove();
     $(module)
       .children(".ig-header")
       .css(
@@ -164,7 +171,12 @@ function modifyModules(
         state === "active" ? PUBLISHED_COLOR : UNPUBLISHED_COLOR,
       )
       .children(".prerequisites")
-      .append(state === "active" ? PUBLISHED_INDICATOR : UNPUBLISHED_INDICATOR);
+      .append(
+        state === "active"
+          ? PUBLISHED_INDICATOR_HTML
+          : UNPUBLISHED_INDICATOR_HTML,
+      )
+      .append(WARNING_CHECKBOX_HTML);
 
     // Modify publish icon bg color
     $(buttonArea).css(
@@ -176,7 +188,7 @@ function modifyModules(
       .find("div.content > ul.ig-list")
       .children("li");
 
-    modifyAssignments(assignments, state, moduleName, warnings);
+    modifyAssignments(assignments, state, moduleName, moduleId, warnings);
   }
 }
 
@@ -190,7 +202,7 @@ export function injectModuleIndicator(target: HTMLElement) {
 
     const filteredWarnings = warnings
       .values()
-      .filter((warning) => warning.showWarning)
+      .filter((warning: Warning) => warning.showWarning)
       .toArray();
     $("#mct-warning-box").remove();
     if (filteredWarnings.length) {
