@@ -213,6 +213,13 @@ function setNewSetting(newSettings: Map<string, boolean>) {
 
 function test(modules: JQuery<HTMLElement>) {
   const moduleSettings = getModuleSettings();
+
+  for (const key of moduleSettings.keys()) {
+    if (!($(modules).attr("data-module-id") === key)) {
+      moduleSettings.delete(key);
+    }
+  }
+
   for (const module of modules) {
     const moduleId = $(module).attr("data-module-id") ?? "";
 
