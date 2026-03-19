@@ -27,15 +27,19 @@ const PREV_BUTTON_HTML = `
 </button>
 `;
 
-const UNPUBLISHED_INDICATOR = `
+const UNPUBLISHED_INDICATOR_HTML = `
 <div id="mct-unpublished-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> 
   Unpublished 
 </div>
 `;
-const PUBLISHED_INDICATOR = `
+const PUBLISHED_INDICATOR_HTML = `
 <div id="mct-published-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> 
   Published 
 </div>
+`;
+
+const WARNING_CHECKBOX_HTML = (defaultValue: boolean, moduleId: string) => `
+<input id="mct-warning-checkbox-${moduleId}" type="checkbox" module-id="${moduleId}" ${defaultValue ? "checked" : ""}/>
 `;
 
 function createWarningBox(
@@ -108,6 +112,7 @@ function modifyAssignments(
   assignments: JQuery<HTMLLIElement>,
   moduleState: string | undefined,
   moduleName: string,
+  canNotify: boolean,
   warnings: Map<string, Warning>,
 ) {
   for (const assignment of assignments) {
@@ -134,7 +139,8 @@ function modifyAssignments(
         moduleState === "unpublished" &&
         !warnings.has(id) &&
         moduleName &&
-        assignmentName
+        assignmentName &&
+        canNotify
       ) {
         warnings.set(id, { id, moduleName, assignmentName, showWarning: true });
       }
@@ -146,6 +152,8 @@ function modifyModules(
   modules: JQuery<HTMLElement>,
   warnings: Map<string, Warning>,
 ) {
+  const moduleSettings = getModuleSettings();
+
   for (const module of modules) {
     const state = $(module).attr("data-workflow-state");
     const buttonArea = $(module).find(
@@ -153,10 +161,13 @@ function modifyModules(
     );
     const moduleName =
       $(module).find("div.ig-header > span > span.name").attr("title") ?? "";
+    const moduleId = $(module).attr("data-module-id") ?? "";
+    const canNotify = moduleSettings.get(moduleId) ?? true;
 
     // Modify Module Header and label
     $(module).find("#mct-unpublished-indicator").remove();
     $(module).find("#mct-published-indicator").remove();
+    $(module).find('[id*="mct-warning-checkbox"]').remove();
     $(module)
       .children(".ig-header")
       .css(
@@ -164,7 +175,12 @@ function modifyModules(
         state === "active" ? PUBLISHED_COLOR : UNPUBLISHED_COLOR,
       )
       .children(".prerequisites")
-      .append(state === "active" ? PUBLISHED_INDICATOR : UNPUBLISHED_INDICATOR);
+      .append(
+        state === "active"
+          ? PUBLISHED_INDICATOR_HTML
+          : UNPUBLISHED_INDICATOR_HTML,
+      )
+      .append(WARNING_CHECKBOX_HTML(canNotify, moduleId));
 
     // Modify publish icon bg color
     $(buttonArea).css(
@@ -176,8 +192,42 @@ function modifyModules(
       .find("div.content > ul.ig-list")
       .children("li");
 
-    modifyAssignments(assignments, state, moduleName, warnings);
+    modifyAssignments(assignments, state, moduleName, canNotify, warnings);
   }
+}
+
+function getModuleSettings() {
+  const moduleSettings: Map<string, boolean> = new Map(
+    JSON.parse(localStorage.getItem("mct-module-settings") ?? "[]"),
+  );
+
+  return moduleSettings;
+}
+
+function setNewSetting(newSettings: Map<string, boolean>) {
+  localStorage.setItem(
+    "mct-module-settings",
+    JSON.stringify(Array.from(newSettings.entries())),
+  );
+}
+
+function initModuleSettings(modules: JQuery<HTMLElement>) {
+  const moduleSettings = getModuleSettings();
+
+  for (const key of moduleSettings.keys()) {
+    if (!($(modules).attr("data-module-id") === key)) {
+      moduleSettings.delete(key);
+    }
+  }
+
+  for (const module of modules) {
+    const moduleId = $(module).attr("data-module-id") ?? "";
+
+    if (!moduleSettings.has(moduleId)) {
+      moduleSettings.set(moduleId, true);
+    }
+  }
+  setNewSetting(moduleSettings);
 }
 
 export function injectModuleIndicator(target: HTMLElement) {
@@ -186,16 +236,25 @@ export function injectModuleIndicator(target: HTMLElement) {
     observer.disconnect();
 
     const modules = $(target).children("[data-workflow-state]");
+    initModuleSettings(modules);
     modifyModules(modules, warnings);
 
     const filteredWarnings = warnings
       .values()
-      .filter((warning) => warning.showWarning)
+      .filter((warning: Warning) => warning.showWarning)
       .toArray();
     $("#mct-warning-box").remove();
     if (filteredWarnings.length) {
       createWarningBox(warnings, filteredWarnings, 0, filteredWarnings.length);
     }
+
+    $('[id*="mct-warning-checkbox"]').on("change", function () {
+      const checked = $(this).is(":checked");
+      const moduleId = $(this).attr("module-id") ?? "";
+      const moduleSettings = getModuleSettings();
+      moduleSettings.set(moduleId, checked);
+      setNewSetting(moduleSettings);
+    });
 
     observer.observe(target, { childList: true, subtree: true });
   });

@@ -23,7 +23,6 @@ async function modifyAssignments(assignmentsOnPage: JQuery<HTMLElement>) {
     const fetchedAssignment = fetchedAssignments.find(
       (a) => a.id === assignmentId,
     );
-    console.log(assignmentId);
 
     if (fetchedAssignment) {
       const newOption = `
