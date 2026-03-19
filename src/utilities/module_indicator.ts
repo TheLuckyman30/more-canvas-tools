@@ -211,7 +211,7 @@ function setNewSetting(newSettings: Map<string, boolean>) {
   );
 }
 
-function test(modules: JQuery<HTMLElement>) {
+function initModuleSettings(modules: JQuery<HTMLElement>) {
   const moduleSettings = getModuleSettings();
 
   for (const key of moduleSettings.keys()) {
@@ -236,7 +236,7 @@ export function injectModuleIndicator(target: HTMLElement) {
     observer.disconnect();
 
     const modules = $(target).children("[data-workflow-state]");
-    test(modules);
+    initModuleSettings(modules);
     modifyModules(modules, warnings);
 
     const filteredWarnings = warnings
