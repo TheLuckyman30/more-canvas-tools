@@ -38,8 +38,8 @@ const PUBLISHED_INDICATOR_HTML = `
 </div>
 `;
 
-const WARNING_CHECKBOX_HTML = `
-<input id="mct-warning-checkbox" type="checkbox" />
+const WARNING_CHECKBOX_HTML = (defaultValue: boolean, moduleId: string) => `
+<input id="mct-warning-checkbox-${moduleId}" type="checkbox" module-id="${moduleId}" ${defaultValue ? "checked" : ""}/>
 `;
 
 function createWarningBox(
@@ -112,7 +112,7 @@ function modifyAssignments(
   assignments: JQuery<HTMLLIElement>,
   moduleState: string | undefined,
   moduleName: string,
-  moduleId: string,
+  canNotify: boolean,
   warnings: Map<string, Warning>,
 ) {
   for (const assignment of assignments) {
@@ -139,7 +139,8 @@ function modifyAssignments(
         moduleState === "unpublished" &&
         !warnings.has(id) &&
         moduleName &&
-        assignmentName
+        assignmentName &&
+        canNotify
       ) {
         warnings.set(id, { id, moduleName, assignmentName, showWarning: true });
       }
@@ -151,6 +152,10 @@ function modifyModules(
   modules: JQuery<HTMLElement>,
   warnings: Map<string, Warning>,
 ) {
+  const notifyModules: string[] = JSON.parse(
+    localStorage.getItem("mct-notify-modules") ?? "[]",
+  );
+
   for (const module of modules) {
     const state = $(module).attr("data-workflow-state");
     const buttonArea = $(module).find(
@@ -159,11 +164,12 @@ function modifyModules(
     const moduleName =
       $(module).find("div.ig-header > span > span.name").attr("title") ?? "";
     const moduleId = $(module).attr("data-module-id") ?? "";
+    const canNotify = notifyModules.some((id) => id === moduleId);
 
     // Modify Module Header and label
     $(module).find("#mct-unpublished-indicator").remove();
     $(module).find("#mct-published-indicator").remove();
-    $(module).find("#mct-warning-checkbox").remove();
+    $(module).find('[id*="mct-warning-checkbox"]').remove();
     $(module)
       .children(".ig-header")
       .css(
@@ -176,7 +182,7 @@ function modifyModules(
           ? PUBLISHED_INDICATOR_HTML
           : UNPUBLISHED_INDICATOR_HTML,
       )
-      .append(WARNING_CHECKBOX_HTML);
+      .append(WARNING_CHECKBOX_HTML(canNotify, moduleId));
 
     // Modify publish icon bg color
     $(buttonArea).css(
@@ -188,7 +194,21 @@ function modifyModules(
       .find("div.content > ul.ig-list")
       .children("li");
 
-    modifyAssignments(assignments, state, moduleName, moduleId, warnings);
+    modifyAssignments(assignments, state, moduleName, canNotify, warnings);
+  }
+}
+
+function test(modules: JQuery<HTMLElement>) {
+  const notifyModules: string[] = JSON.parse(
+    localStorage.getItem("mct-notify-modules") ?? "[]",
+  );
+
+  if (!notifyModules) {
+    const newNotifyModules: string[] = [];
+    for (const module of modules) {
+      const moduleId = $(module).attr("data-module-id") ?? "";
+      newNotifyModules.push(moduleId);
+    }
   }
 }
 
@@ -208,6 +228,11 @@ export function injectModuleIndicator(target: HTMLElement) {
     if (filteredWarnings.length) {
       createWarningBox(warnings, filteredWarnings, 0, filteredWarnings.length);
     }
+
+    $('[id*="mct-warning-checkbox"]').on("change", function () {
+      const checked = $(this).is(":checked");
+      console.log(checked);
+    });
 
     observer.observe(target, { childList: true, subtree: true });
   });
