@@ -152,9 +152,7 @@ function modifyModules(
   modules: JQuery<HTMLElement>,
   warnings: Map<string, Warning>,
 ) {
-  const notifyModules: string[] = JSON.parse(
-    localStorage.getItem("mct-notify-modules") ?? "[]",
-  );
+  const moduleSettings = getModuleSettings();
 
   for (const module of modules) {
     const state = $(module).attr("data-workflow-state");
@@ -164,7 +162,7 @@ function modifyModules(
     const moduleName =
       $(module).find("div.ig-header > span > span.name").attr("title") ?? "";
     const moduleId = $(module).attr("data-module-id") ?? "";
-    const canNotify = notifyModules.some((id) => id === moduleId);
+    const canNotify = moduleSettings.get(moduleId) ?? true;
 
     // Modify Module Header and label
     $(module).find("#mct-unpublished-indicator").remove();
@@ -198,18 +196,31 @@ function modifyModules(
   }
 }
 
-function test(modules: JQuery<HTMLElement>) {
-  const notifyModules: string[] = JSON.parse(
-    localStorage.getItem("mct-notify-modules") ?? "[]",
+function getModuleSettings() {
+  const moduleSettings: Map<string, boolean> = new Map(
+    JSON.parse(localStorage.getItem("mct-module-settings") ?? "[]"),
   );
 
-  if (!notifyModules) {
-    const newNotifyModules: string[] = [];
-    for (const module of modules) {
-      const moduleId = $(module).attr("data-module-id") ?? "";
-      newNotifyModules.push(moduleId);
+  return moduleSettings;
+}
+
+function setNewSetting(newSettings: Map<string, boolean>) {
+  localStorage.setItem(
+    "mct-module-settings",
+    JSON.stringify(Array.from(newSettings.entries())),
+  );
+}
+
+function test(modules: JQuery<HTMLElement>) {
+  const moduleSettings = getModuleSettings();
+  for (const module of modules) {
+    const moduleId = $(module).attr("data-module-id") ?? "";
+
+    if (!moduleSettings.has(moduleId)) {
+      moduleSettings.set(moduleId, true);
     }
   }
+  setNewSetting(moduleSettings);
 }
 
 export function injectModuleIndicator(target: HTMLElement) {
@@ -218,6 +229,7 @@ export function injectModuleIndicator(target: HTMLElement) {
     observer.disconnect();
 
     const modules = $(target).children("[data-workflow-state]");
+    test(modules);
     modifyModules(modules, warnings);
 
     const filteredWarnings = warnings
@@ -231,7 +243,10 @@ export function injectModuleIndicator(target: HTMLElement) {
 
     $('[id*="mct-warning-checkbox"]').on("change", function () {
       const checked = $(this).is(":checked");
-      console.log(checked);
+      const moduleId = $(this).attr("module-id") ?? "";
+      const moduleSettings = getModuleSettings();
+      moduleSettings.set(moduleId, checked);
+      setNewSetting(moduleSettings);
     });
 
     observer.observe(target, { childList: true, subtree: true });
