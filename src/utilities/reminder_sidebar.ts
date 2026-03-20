@@ -10,12 +10,17 @@ const NO_REMINDER_HTML = `
 const REMINDER_SECTION_HTML = `
 <div id="mct-reminder-section"
      style="display: flex; flex-direction: column">
-    <h4 style="font-weight: bold;">Reminders</h4>
-    <h5>Release Grades</h5>
-    <hr style="margin: 10px, 0">
-    <div id="mct-reminder-section-container" style="display: flex; flex-direction: column; gap: 2rem"></div>
+    <h2 style=" font-size: 1rem; overflow: hidden; border-bottom: 1px solid #e8eaec; padding-bottom: 6px; margin: 0 0 6px; font-weight: bold; margin-top: 1.0625rem;">
+    Grade Release Reminders</h2>
+    <div id="mct-reminder-section-container" style="display: flex; flex-direction: column;"></div>
 </div>
 `;
+
+function trueActiveDate(){ 
+
+
+}
+
 
 function getActiveReminders() {
   const reminders: Reminder[] = JSON.parse(
@@ -42,14 +47,36 @@ export function injectReminderSideBar(target: HTMLElement) {
   if (reminders.length) {
     const reminderSection = $("div#mct-reminder-section-container");
     for (const reminder of reminders) {
+
+      const newTargetDate= reminder.targetDate.split(":");
+      const getPMorAM= newTargetDate[2].split(" ");
+      const newDate= newTargetDate[0]+":"+newTargetDate[1]+ getPMorAM[1];
+      
       const reminderHtml = `
-        <div id="mct-reminder-${reminder.id}">
-            <div style="display: flex; justify-content: space-between">
-              <div>${reminder.targetDate} - ${reminder.assignmentName}</div>
-              <div id="mct-reminder-cancel-${reminder.id}" style="cursor: pointer">X</div>
-            </div>
-            <div>${reminder.courseName}</div>
-        </div>
+      <div style="display:flex;">
+        <div id="mct-reminder-${reminder.id}" style="display: block; unicode-bidi: isolate; min-width: 90%">
+          
+          <ul style="display: block; list-style-type: disc; margin-block-start: 0.5em; margin-block-end: 0.5em; padding-inline-start: 10px; unicode-bidi: isolate;">
+            <li style="list-style: none;">
+              <div style="padding-right: 12px; flex: 1; min-width: 5px; overflow: hidden; position: relative;">
+                  <a href="${reminder.url}" target="_blank" style="font-size: 0.875rem; display: flex;">
+                    ${reminder.assignmentName}
+                  </a>
+                  <div style="color: #777; font-size: 0.775rem;">${reminder.courseName}</div>
+                  <div style="display: flex; justify-content: space-between">
+                    <div style="font-size: 0.775rem; color: #777;">${newDate}</div>
+                      
+                  </div>
+              </div>
+                
+            </li>
+          </ul>
+          
+
+          </div>
+          <div id="mct-reminder-cancel-${reminder.id}" style=" display: flex; justify-content: flex-end; width: 100%; cursor: pointer; color: #777;">x</div>
+      </div>
+        
       `;
 
       $(reminderSection).append(reminderHtml);

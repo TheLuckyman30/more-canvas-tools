@@ -28,18 +28,18 @@ const PREV_BUTTON_HTML = `
 `;
 
 const UNPUBLISHED_INDICATOR_HTML = `
-<div id="mct-unpublished-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> 
-  Unpublished 
+<div id="mct-unpublished-indicator" style="border-right: 1px solid gray;padding-left: 0.5rem; padding-right: 0.5rem; justify-content: start; display: flex;  text-shadow: 1px 1px 0 rgba(255, 255, 255, .5);"> 
+  <b>Unpublished</b>
 </div>
 `;
 const PUBLISHED_INDICATOR_HTML = `
-<div id="mct-published-indicator" style="border: 2px solid gray; padding: 0.5rem; border-radius: 0.375rem; justify-content: start; display: flex;"> 
-  Published 
+<div id="mct-published-indicator" style="border-right: 1px solid gray; padding-left: 0.5rem; padding-right: 0.5rem; justify-content: start; display: flex;  text-shadow: 1px 1px 0 rgba(255, 255, 255, .5);"> 
+  <b>Published</b>
 </div>
 `;
 
 const WARNING_CHECKBOX_HTML = (defaultValue: boolean, moduleId: string) => `
-<input id="mct-warning-checkbox-${moduleId}" type="checkbox" module-id="${moduleId}" ${defaultValue ? "checked" : ""}/>
+<input id="mct-warning-checkbox-${moduleId}" type="checkbox" module-id="${moduleId}" ${defaultValue ? "checked" : ""} title= "Enable module indicator warnings" style="height: 1rem; width: 1rem; align-items: center; display: flex; "/>
 `;
 
 function createWarningBox(
@@ -170,17 +170,23 @@ function modifyModules(
     $(module).find('[id*="mct-warning-checkbox"]').remove();
     $(module)
       .children(".ig-header")
-      .css(
-        "background-color",
-        state === "active" ? PUBLISHED_COLOR : UNPUBLISHED_COLOR,
-      )
+      .css({
+        "background-color": state === "active" ? PUBLISHED_COLOR : UNPUBLISHED_COLOR,
+        "justify-content": "center",
+        "align-items": "center"
+      })
+
       .children(".prerequisites")
       .append(
         state === "active"
           ? PUBLISHED_INDICATOR_HTML
           : UNPUBLISHED_INDICATOR_HTML,
       )
-      .append(WARNING_CHECKBOX_HTML(canNotify, moduleId));
+      
+      $(module)
+        .find(".ig-header> div.module_header_items")
+        .after(WARNING_CHECKBOX_HTML(canNotify, moduleId))
+
 
     // Modify publish icon bg color
     $(buttonArea).css(
