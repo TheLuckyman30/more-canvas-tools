@@ -49,7 +49,35 @@ export async function createReminder(
   localStorage.setItem("mct-reminder-nextId", JSON.stringify(nextId + 1));
 }
 
-export function updateReminder() {}
+export function updateReminder(
+  updateReminderId: number,
+  newDate: string,
+  calendarId: number,
+) {
+  const storedReminders: Reminder[] = JSON.parse(
+    localStorage.getItem("mct-reminders") ?? "[]",
+  );
+  const updatedReminders = storedReminders.map((reminder) => {
+    if (reminder.id === updateReminderId) {
+      return { ...reminder, targetDate: newDate };
+    }
+    return { ...reminder };
+  });
+
+  const updateCalendarEvent = {
+    calendar_event: {
+      start_at: newDate,
+      end_at: newDate,
+    },
+  };
+
+  mutationFetcher({
+    endpoint: `https://canvas.instructure.com/api/v1/calendar_events/${calendarId}`,
+    method: "PUT",
+    body: updateCalendarEvent,
+  });
+  localStorage.setItem("mct-reminders", JSON.stringify(updatedReminders));
+}
 
 export function deleteReminder(deleteReminderId: number, calendarId: number) {
   const storedReminders: Reminder[] = JSON.parse(
