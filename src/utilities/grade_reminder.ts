@@ -1,4 +1,4 @@
-import { CreateCalendarEvent, Reminder } from "~src/canvas/interfaces";
+import { Reminder } from "~src/canvas/interfaces";
 import { deleteReminder, updateReminder } from "~src/helpers/reminder-helpers";
 const REMINDER_COLOR = "rgb(211, 241, 185)";
 
@@ -26,6 +26,23 @@ const PREV_BUTTON_HTML = `
   Prev
 </button>
 `;
+
+function removeReminderFromScreen(
+  reminders: Reminder[],
+  index: number,
+  canDisplayNext: boolean,
+  canDisplayPrev: boolean,
+) {
+  reminders.splice(index, 1);
+
+  if (!canDisplayNext && canDisplayPrev) {
+    createReminderBox(reminders, index - 1, reminders.length);
+  } else if (canDisplayNext) {
+    createReminderBox(reminders, index, reminders.length);
+  } else {
+    $("div#mct-reminder-box").remove();
+  }
+}
 
 function createReminderBox(
   reminders: Reminder[],
@@ -77,28 +94,12 @@ function createReminderBox(
   $("button#mct-reminder-later").on("click", async () => {
     const newDate = new Date(2026, 2, 20).toLocaleDateString();
     updateReminder(id, newDate, calendarId);
-    reminders.splice(index, 1);
-
-    if (!canDisplayNext && canDisplayPrev) {
-      createReminderBox(reminders, index - 1, reminders.length);
-    } else if (canDisplayNext) {
-      createReminderBox(reminders, index, reminders.length);
-    } else {
-      $("div#mct-reminder-box").remove();
-    }
+    removeReminderFromScreen(reminders, index, canDisplayNext, canDisplayPrev);
   });
 
   $("div#mct-reminder-close").on("click", () => {
     deleteReminder(id, calendarId);
-    reminders.splice(index, 1);
-
-    if (!canDisplayNext && canDisplayPrev) {
-      createReminderBox(reminders, index - 1, reminders.length);
-    } else if (canDisplayNext) {
-      createReminderBox(reminders, index, reminders.length);
-    } else {
-      $("div#mct-reminder-box").remove();
-    }
+    removeReminderFromScreen(reminders, index, canDisplayNext, canDisplayPrev);
   });
 }
 

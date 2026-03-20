@@ -54,6 +54,7 @@ export function updateReminder(
   newDate: string,
   calendarId: number,
 ) {
+  const [month, day, year] = newDate.split("/").map((val) => Number(val));
   const storedReminders: Reminder[] = JSON.parse(
     localStorage.getItem("mct-reminders") ?? "[]",
   );
@@ -66,8 +67,8 @@ export function updateReminder(
 
   const updateCalendarEvent = {
     calendar_event: {
-      start_at: newDate,
-      end_at: newDate,
+      start_at: `${day}/${month}/${year}`,
+      end_at: `${day}/${month}/${year}`,
     },
   };
 
