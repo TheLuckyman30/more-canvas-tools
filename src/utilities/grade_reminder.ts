@@ -2,7 +2,6 @@ import { Reminder } from "~src/canvas/interfaces";
 import {
   buildReminderInput,
   deleteReminder,
-  updateReminder,
 } from "~src/helpers/reminder-helpers";
 const REMINDER_COLOR = "rgb(211, 241, 185)";
 

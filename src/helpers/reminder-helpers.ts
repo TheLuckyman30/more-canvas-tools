@@ -5,6 +5,8 @@ import {
 } from "~src/canvas/interfaces";
 import { mutationFetcher } from "./fetch";
 import { updateOnScreenReminder } from "~src/utilities/grade_reminder";
+import { isOnDashboard } from "~src/canvas/page_checks";
+import { injectReminderSideBar } from "~src/utilities/reminder_sidebar";
 
 export async function createReminder(
   courseId: string,
@@ -175,6 +177,11 @@ export function buildReminderInput(opts: {
           canDisplayNext,
           canDisplayPrev,
         );
+
+        if (isOnDashboard) {
+          $("#mct-reminder-section").remove();
+          injectReminderSideBar($("div#right-side-wrapper")[0]);
+        }
       }
     }
 
