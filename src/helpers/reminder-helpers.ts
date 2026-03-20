@@ -11,6 +11,7 @@ import { injectReminderSideBar } from "~src/utilities/reminder_sidebar";
 export async function createReminder(
   courseId: string,
   assignmentName: string,
+  qlAssignmentId: string,
   courseName: string,
   day: number,
   month: number,
@@ -47,8 +48,9 @@ export async function createReminder(
     url: `https://canvas.instructure.com/courses/${courseId}/gradebook`,
     calendarId: calEvent.id,
     targetDate: newDate,
-    courseName: courseName,
-    assignmentName: assignmentName,
+    courseName,
+    assignmentName,
+    qlAssignmentId,
   });
 
   localStorage.setItem("mct-reminders", JSON.stringify(reminders));
@@ -114,6 +116,7 @@ export function buildReminderInput(opts: {
   createOpts?: {
     assignmentName: string;
     courseName: string;
+    qlAssignmentId: string;
   };
   updateOpts?: {
     reminders: Reminder[];
@@ -183,10 +186,11 @@ export function buildReminderInput(opts: {
       const [hour, minute] = time.split(":").map((val) => Number(val));
 
       if (createOpts) {
-        const { assignmentName, courseName } = createOpts;
+        const { assignmentName, courseName, qlAssignmentId } = createOpts;
         createReminder(
           courseId,
           assignmentName,
+          qlAssignmentId,
           courseName,
           day,
           month,

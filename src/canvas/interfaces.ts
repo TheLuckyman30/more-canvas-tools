@@ -191,6 +191,7 @@ export interface Reminder {
   targetDate: string;
   courseName: string;
   assignmentName: string;
+  qlAssignmentId: string;
 }
 
 export interface CreateCalendarEvent {
@@ -205,4 +206,8 @@ export interface CreateCalendarEvent {
 
 export interface CalendarEventOut {
   id: number;
+}
+
+export interface AssignmentQlOut {
+  data: { assignment: { id: string } };
 }
