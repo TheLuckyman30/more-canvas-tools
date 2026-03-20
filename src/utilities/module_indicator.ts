@@ -171,9 +171,10 @@ function modifyModules(
     $(module)
       .children(".ig-header")
       .css({
-        "background-color": state === "active" ? PUBLISHED_COLOR : UNPUBLISHED_COLOR,
+        "background-color":
+          state === "active" ? PUBLISHED_COLOR : UNPUBLISHED_COLOR,
         "justify-content": "center",
-        "align-items": "center"
+        "align-items": "center",
       })
 
       .children(".prerequisites")
@@ -181,12 +182,11 @@ function modifyModules(
         state === "active"
           ? PUBLISHED_INDICATOR_HTML
           : UNPUBLISHED_INDICATOR_HTML,
-      )
-      
-      $(module)
-        .find(".ig-header> div.module_header_items")
-        .after(WARNING_CHECKBOX_HTML(canNotify, moduleId))
+      );
 
+    $(module)
+      .find(".ig-header> div.module_header_items")
+      .after(WARNING_CHECKBOX_HTML(canNotify, moduleId));
 
     // Modify publish icon bg color
     $(buttonArea).css(
@@ -219,16 +219,17 @@ function setNewSetting(newSettings: Map<string, boolean>) {
 
 function initModuleSettings(modules: JQuery<HTMLElement>) {
   const moduleSettings = getModuleSettings();
+  const moduleIds = modules
+    .map((_, module) => $(module).attr("data-module-id") ?? "")
+    .toArray();
 
   for (const key of moduleSettings.keys()) {
-    if (!($(modules).attr("data-module-id") === key)) {
+    if (!moduleIds.some((id) => id === key)) {
       moduleSettings.delete(key);
     }
   }
 
-  for (const module of modules) {
-    const moduleId = $(module).attr("data-module-id") ?? "";
-
+  for (const moduleId of moduleIds) {
     if (!moduleSettings.has(moduleId)) {
       moduleSettings.set(moduleId, true);
     }
