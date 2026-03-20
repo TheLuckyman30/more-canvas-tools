@@ -13,19 +13,19 @@ const CLOSE_BUTTON = `
 `;
 
 const REMINDER_LATER_BUTTON_HTML = `
-<button id="mct-reminder-later">
-  Reminder Later
+<button id="mct-reminder-later" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; width: max-content; border-radius: 0.375rem; cursor: pointer">
+  Remind Later
 </button>
 `;
 
 const NEXT_BUTTON_HTML = `
-<button id="mct-next" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; width: 6vw; border-radius: 0.375rem; cursor: pointer">
+<button id="mct-next" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; width: 4vw; border-radius: 0.375rem; cursor: pointer">
   Next
 </button>
 `;
 
 const PREV_BUTTON_HTML = `
-<button id="mct-prev" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; width: 6vw; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer">
+<button id="mct-prev" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; width: 4vw; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer">
   Prev
 </button>
 `;
@@ -69,12 +69,13 @@ function createReminderBox(
       </div>
       <div style="display: flex; justify-content: space-between; align-items: center">
 
-        <button style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; 
-        border-radius: 0.375rem; cursor: pointer;  width: 6vw" id="go-to-assignment" >
-          <a href="${url}" target="_blank">Go To</a>
-        </button>
-        ${canDisplayPrev ? PREV_BUTTON_HTML : ""}${REMINDER_LATER_BUTTON_HTML}
-        ${canDisplayNext ? NEXT_BUTTON_HTML : ""}
+        
+          <a href="${url}" target="_blank">
+            <button style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer;  width: 4rem" id="go-to-assignment" >
+            Go To
+            </button>
+          </a>  
+        ${REMINDER_LATER_BUTTON_HTML} ${canDisplayPrev ? PREV_BUTTON_HTML : ""} ${canDisplayNext ? NEXT_BUTTON_HTML : ""}
       </div>
     </div>
   `;
