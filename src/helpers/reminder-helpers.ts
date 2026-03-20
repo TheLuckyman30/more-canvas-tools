@@ -56,8 +56,7 @@ export async function createReminder(
 }
 
 export function updateReminder(
-  updateReminderId: number,
-  calendarId: number,
+  reminder: Reminder,
   day: number,
   month: number,
   year: number,
@@ -65,12 +64,13 @@ export function updateReminder(
   minute: number,
   useTime: boolean,
 ) {
+  const { id, calendarId } = reminder;
   const newDate = new Date(year, month - 1, day, hour, minute).toLocaleString();
   const storedReminders: Reminder[] = JSON.parse(
     localStorage.getItem("mct-reminders") ?? "[]",
   );
   const updatedReminders = storedReminders.map((reminder) => {
-    if (reminder.id === updateReminderId) {
+    if (reminder.id === id) {
       return { ...reminder, targetDate: newDate };
     }
     return { ...reminder };
@@ -198,8 +198,7 @@ export function buildReminderInput(opts: {
       } else if (updateOpts) {
         const { reminders, index, canDisplayNext, canDisplayPrev } = updateOpts;
         updateReminder(
-          reminders[index].id,
-          reminders[index].calendarId,
+          reminders[index],
           day,
           month,
           year,
