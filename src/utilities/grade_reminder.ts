@@ -1,4 +1,5 @@
 import { Reminder } from "~src/canvas/interfaces";
+import { mutationFetcher } from "~src/helpers/fetch";
 import {
   buildReminderInput,
   deleteReminder,
@@ -52,7 +53,8 @@ function createReminderBox(
   index: number,
   length: number,
 ) {
-  const { id, courseName, assignmentName, calendarId, url } = reminders[index];
+  const { id, courseName, assignmentName, calendarId, qlAssignmentId } =
+    reminders[index];
   const canDisplayNext = index !== length - 1 && length > 1;
   const canDisplayPrev = index !== 0 && length > 1;
 
@@ -68,13 +70,9 @@ function createReminderBox(
         Release the grades for assignment: '${assignmentName}' in course: '${courseName}'
       </div>
       <div style="display: flex; justify-content: space-between; align-items: center">
-
-        
-          <a href="${url}" target="_blank">
-            <button style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer;  width: 4rem" id="go-to-assignment" >
-            Go To
-            </button>
-          </a>  
+        <button id="mct-publish-grades" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer;  width: 4rem">
+          Publish
+        </button>  
         ${REMINDER_LATER_BUTTON_HTML} ${canDisplayPrev ? PREV_BUTTON_HTML : ""} ${canDisplayNext ? NEXT_BUTTON_HTML : ""}
       </div>
     </div>
@@ -102,6 +100,25 @@ function createReminderBox(
   });
 
   $("div#mct-reminder-close").on("click", () => {
+    deleteReminder(id, calendarId);
+    updateOnScreenReminder(reminders, index, canDisplayNext, canDisplayPrev);
+  });
+
+  $("button#mct-publish-grades").on("click", () => {
+    const graphQLBody = {
+      query:
+        "mutation SpeedGrader_PostAssignmentGrades($assignmentId: ID!, $sectionIds: [ID!], $gradedOnly: Boolean) {\n  postAssignmentGrades(\n    input: {assignmentId: $assignmentId, sectionIds: $sectionIds, gradedOnly: $gradedOnly}\n  ) {\n    progress {\n      _id\n      state\n    }\n  }\n}",
+      variables: {
+        assignmentId: qlAssignmentId,
+        gradedOnly: false,
+      },
+      operationName: "SpeedGrader_PostAssignmentGrades",
+    };
+    mutationFetcher({
+      endpoint: "https://canvas.instructure.com/api/graphql",
+      method: "POST",
+      body: graphQLBody,
+    });
     deleteReminder(id, calendarId);
     updateOnScreenReminder(reminders, index, canDisplayNext, canDisplayPrev);
   });
