@@ -1,4 +1,4 @@
-import { Reminder } from "~src/canvas/interfaces";
+import { CreateCalendarEvent, Reminder } from "~src/canvas/interfaces";
 const REMINDER_COLOR = "rgb(211, 241, 185)";
 
 const CLOSE_BUTTON = `
@@ -6,6 +6,12 @@ const CLOSE_BUTTON = `
      style="cursor: pointer">
   X
 </div>
+`;
+
+const REMINDER_LATER_BUTTON_HTML = `
+<button id="mct-reminder-later">
+  Reminder Later
+</button>
 `;
 
 const NEXT_BUTTON_HTML = `
@@ -46,7 +52,7 @@ function createReminderBox(
         border-radius: 0.375rem; cursor: pointer;  width: 6vw" id="go-to-assignment" >
           <a href="${url}" target="_blank">Go To</a>
         </button>
-        ${canDisplayPrev ? PREV_BUTTON_HTML : ""}
+        ${canDisplayPrev ? PREV_BUTTON_HTML : ""}${REMINDER_LATER_BUTTON_HTML}
         ${canDisplayNext ? NEXT_BUTTON_HTML : ""}
       </div>
     </div>
@@ -66,6 +72,51 @@ function createReminderBox(
       createReminderBox(reminders, index - 1, length);
     });
   }
+
+  $("button#mct-reminder-later").on("click", async () => {
+    const newDate = new Date(2026, 2, 20).toLocaleDateString();
+    const storedReminders: Reminder[] = JSON.parse(
+      localStorage.getItem("mct-reminders") ?? "[]",
+    );
+    const updatedReminders = storedReminders.map((reminder) => {
+      if (reminder.id === id) {
+        return { ...reminder, targetDate: newDate };
+      }
+      return { ...reminder };
+    });
+
+    const updateCalendarEvent = {
+      calendar_event: {
+        start_at: `${20}/${3}/${2026}`,
+        end_at: `${20}/${3}/${2026}`,
+      },
+    };
+
+    const token = GM_getValue("CANVAS_TOKEN");
+    fetch(
+      `https://canvas.instructure.com/api/v1/calendar_events/${calendarId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+        body: JSON.stringify(updateCalendarEvent),
+      },
+    );
+
+    localStorage.setItem("mct-reminders", JSON.stringify(updatedReminders));
+
+    reminders.splice(index, 1);
+
+    if (!canDisplayNext && canDisplayPrev) {
+      createReminderBox(reminders, index - 1, reminders.length);
+    } else if (canDisplayNext) {
+      createReminderBox(reminders, index, reminders.length);
+    } else {
+      $("div#mct-reminder-box").remove();
+    }
+  });
 
   $("div#mct-reminder-close").on("click", () => {
     const storedReminders: Reminder[] = JSON.parse(
