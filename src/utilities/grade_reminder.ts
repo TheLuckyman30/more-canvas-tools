@@ -1,5 +1,9 @@
 import { Reminder } from "~src/canvas/interfaces";
-import { deleteReminder, updateReminder } from "~src/helpers/reminder-helpers";
+import {
+  buildReminderInput,
+  deleteReminder,
+  updateReminder,
+} from "~src/helpers/reminder-helpers";
 const REMINDER_COLOR = "rgb(211, 241, 185)";
 
 const CLOSE_BUTTON = `
@@ -27,7 +31,7 @@ const PREV_BUTTON_HTML = `
 </button>
 `;
 
-function updateOnScreenReminder(
+export function updateOnScreenReminder(
   reminders: Reminder[],
   index: number,
   canDisplayNext: boolean,
@@ -92,9 +96,9 @@ function createReminderBox(
   }
 
   $("button#mct-reminder-later").on("click", () => {
-    const newDate = new Date(2026, 2, 20).toLocaleDateString();
-    updateReminder(id, newDate, calendarId);
-    updateOnScreenReminder(reminders, index, canDisplayNext, canDisplayPrev);
+    buildReminderInput({
+      updateOpts: { reminders, index, canDisplayNext, canDisplayPrev },
+    });
   });
 
   $("div#mct-reminder-close").on("click", () => {

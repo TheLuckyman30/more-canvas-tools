@@ -4,6 +4,7 @@ import {
   Reminder,
 } from "~src/canvas/interfaces";
 import { mutationFetcher } from "./fetch";
+import { updateOnScreenReminder } from "~src/utilities/grade_reminder";
 
 export async function createReminder(
   courseId: string,
@@ -103,7 +104,12 @@ export function buildReminderInput(opts: {
     assignmentName: string;
     courseName: string;
   };
-  updateOpts?: {};
+  updateOpts?: {
+    reminders: Reminder[];
+    index: number;
+    canDisplayNext: boolean;
+    canDisplayPrev: boolean;
+  };
 }) {
   const { createOpts, updateOpts } = opts;
   const CLOSE_BUTTON = `
@@ -155,6 +161,20 @@ export function buildReminderInput(opts: {
       if (createOpts) {
         const { assignmentName, courseName } = createOpts;
         createReminder(courseId, assignmentName, courseName, day, month, year);
+      } else if (updateOpts) {
+        const { reminders, index, canDisplayNext, canDisplayPrev } = updateOpts;
+        const newDate = new Date(year, month - 1, day).toLocaleDateString();
+        updateReminder(
+          reminders[index].id,
+          newDate,
+          reminders[index].calendarId,
+        );
+        updateOnScreenReminder(
+          reminders,
+          index,
+          canDisplayNext,
+          canDisplayPrev,
+        );
       }
     }
 
