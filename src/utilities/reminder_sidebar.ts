@@ -56,6 +56,13 @@ export function injectReminderSideBar(target: HTMLElement) {
       $(`div#mct-reminder-cancel-${reminder.id}`).on("click", () => {
         deleteReminder(reminder.id, reminder.calendarId);
         $(`div#mct-reminder-${reminder.id}`).remove();
+        const currentReminders = JSON.parse(
+          localStorage.getItem("mct-reminders") ?? "[]",
+        );
+
+        if (!currentReminders.length) {
+          $(reminderSection).append(NO_REMINDER_HTML);
+        }
       });
     }
   } else {
