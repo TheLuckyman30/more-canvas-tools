@@ -1,4 +1,8 @@
 import { Reminder } from "~src/canvas/interfaces";
+import {
+  buildReminderInput,
+  deleteReminder,
+} from "~src/helpers/reminder-helpers";
 const REMINDER_COLOR = "rgb(211, 241, 185)";
 
 const CLOSE_BUTTON = `
@@ -6,6 +10,12 @@ const CLOSE_BUTTON = `
      style="cursor: pointer">
   X
 </div>
+`;
+
+const REMINDER_LATER_BUTTON_HTML = `
+<button id="mct-reminder-later">
+  Reminder Later
+</button>
 `;
 
 const NEXT_BUTTON_HTML = `
@@ -19,6 +29,23 @@ const PREV_BUTTON_HTML = `
   Prev
 </button>
 `;
+
+export function updateOnScreenReminder(
+  reminders: Reminder[],
+  index: number,
+  canDisplayNext: boolean,
+  canDisplayPrev: boolean,
+) {
+  reminders.splice(index, 1);
+
+  if (!canDisplayNext && canDisplayPrev) {
+    createReminderBox(reminders, index - 1, reminders.length);
+  } else if (canDisplayNext) {
+    createReminderBox(reminders, index, reminders.length);
+  } else {
+    $("div#mct-reminder-box").remove();
+  }
+}
 
 function createReminderBox(
   reminders: Reminder[],
@@ -46,7 +73,7 @@ function createReminderBox(
         border-radius: 0.375rem; cursor: pointer;  width: 6vw" id="go-to-assignment" >
           <a href="${url}" target="_blank">Go To</a>
         </button>
-        ${canDisplayPrev ? PREV_BUTTON_HTML : ""}
+        ${canDisplayPrev ? PREV_BUTTON_HTML : ""}${REMINDER_LATER_BUTTON_HTML}
         ${canDisplayNext ? NEXT_BUTTON_HTML : ""}
       </div>
     </div>
@@ -67,40 +94,15 @@ function createReminderBox(
     });
   }
 
+  $("button#mct-reminder-later").on("click", () => {
+    buildReminderInput({
+      updateOpts: { reminders, index, canDisplayNext, canDisplayPrev },
+    });
+  });
+
   $("div#mct-reminder-close").on("click", () => {
-    const storedReminders: Reminder[] = JSON.parse(
-      localStorage.getItem("mct-reminders") ?? "[]",
-    );
-    const newReminders = storedReminders.filter(
-      (reminder) => reminder.id !== id,
-    );
-
-    if (!newReminders.length) {
-      localStorage.setItem("mct-reminder-nextId", "0");
-    }
-    localStorage.setItem("mct-reminders", JSON.stringify(newReminders));
-
-    const token = GM_getValue("CANVAS_TOKEN");
-    fetch(
-      `https://canvas.instructure.com/api/v1/calendar_events/${calendarId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        method: "DELETE",
-      },
-    );
-
-    reminders.splice(index, 1);
-
-    if (!canDisplayNext && canDisplayPrev) {
-      createReminderBox(reminders, index - 1, reminders.length);
-    } else if (canDisplayNext) {
-      createReminderBox(reminders, index, reminders.length);
-    } else {
-      $("div#mct-reminder-box").remove();
-    }
+    deleteReminder(id, calendarId);
+    updateOnScreenReminder(reminders, index, canDisplayNext, canDisplayPrev);
   });
 }
 
