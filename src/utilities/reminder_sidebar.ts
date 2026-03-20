@@ -1,4 +1,5 @@
 import { Reminder } from "~src/canvas/interfaces";
+import { deleteReminder } from "~src/helpers/reminder-helpers";
 
 const NO_REMINDER_HTML = `
 <div>
@@ -53,28 +54,8 @@ export function injectReminderSideBar(target: HTMLElement) {
 
       $(reminderSection).append(reminderHtml);
       $(`div#mct-reminder-cancel-${reminder.id}`).on("click", () => {
-        const token = GM_getValue("CANVAS_TOKEN");
-        const newReminders = getActiveReminders().filter(
-          (r) => r.id !== reminder.id,
-        );
+        deleteReminder(reminder.id, reminder.calendarId);
         $(`div#mct-reminder-${reminder.id}`).remove();
-        localStorage.setItem("mct-reminders", JSON.stringify(newReminders));
-
-        fetch(
-          `https://canvas.instructure.com/api/v1/calendar_events/${reminder.calendarId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-            method: "DELETE",
-          },
-        );
-
-        if (!newReminders.length) {
-          $(reminderSection).append(NO_REMINDER_HTML);
-          localStorage.setItem("mct-reminder-nextId", "0");
-        }
       });
     }
   } else {

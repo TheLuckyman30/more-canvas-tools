@@ -110,15 +110,6 @@ export interface Course {
   workflow_state: string;
 }
 
-export interface Reminder {
-  id: number;
-  url: string;
-  calendarId: number;
-  targetDate: string;
-  courseName: string;
-  assignmentName: string;
-}
-
 export enum WorkflowState {
   submitted = "submitted",
   unsubmitted = "unsubmitted",
@@ -143,16 +134,6 @@ export interface Submission {
   full_rubric_assessment?: FullRubricAssessment;
   submission_comments: Comment[];
   preview_url: string;
-}
-
-export interface CreateCalendarEvent {
-  calendar_event: {
-    context_code: string;
-    title: string;
-    description: string;
-    all_day: boolean;
-    start_at: string;
-  };
 }
 
 export interface Comment {
@@ -201,4 +182,27 @@ export interface RubricCriterion {
   description: string;
   long_description: string;
   points: number;
+}
+
+export interface Reminder {
+  id: number;
+  url: string;
+  calendarId: number;
+  targetDate: string;
+  courseName: string;
+  assignmentName: string;
+}
+
+export interface CreateCalendarEvent {
+  calendar_event: {
+    context_code: string;
+    title: string;
+    description: string;
+    all_day: boolean;
+    start_at: string;
+  };
+}
+
+export interface CalendarEventOut {
+  id: number;
 }

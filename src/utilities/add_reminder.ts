@@ -1,4 +1,4 @@
-import { CreateCalendarEvent, Reminder } from "~src/canvas/interfaces";
+import { createReminder } from "~src/helpers/reminder-helpers";
 
 const CLOSE_BUTTON = `
 <div id="mct-grader-close"
@@ -65,54 +65,18 @@ export function injectAddReminder(target: HTMLElement) {
           const date = datePicker.val() as string;
 
           if (date) {
-            const token = GM_getValue("CANVAS_TOKEN");
             const courseId = window.location.pathname.split("/")[2];
-
             const [year, month, day] = date
               .split("-")
               .map((val) => Number(val));
-            const newDate = new Date(year, month - 1, day).toLocaleDateString();
 
-            const newCalendarEvent: CreateCalendarEvent = {
-              calendar_event: {
-                context_code: `course_${courseId}`,
-                title: `Release Grades for ${assignmentName}`,
-                description: `Release Grades for ${assignmentName} in ${courseName}`,
-                all_day: true,
-                start_at: `${day}/${month}/${year}`,
-              },
-            };
-            const response = await fetch(
-              "https://canvas.instructure.com/api/v1/calendar_events",
-              {
-                body: JSON.stringify(newCalendarEvent),
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                  "Content-Type": "application/json",
-                },
-                method: "POST",
-              },
-            );
-            const calEvent = await response.json();
-
-            let nextId =
-              Number(localStorage.getItem("mct-reminder-nextId")) ?? 0;
-            const reminders: Reminder[] = JSON.parse(
-              localStorage.getItem("mct-reminders") ?? "[]",
-            );
-            reminders.push({
-              id: nextId,
-              url: `https://canvas.instructure.com/courses/${courseId}/gradebook`,
-              calendarId: calEvent.id,
-              targetDate: newDate,
-              courseName: courseName,
-              assignmentName: assignmentName,
-            });
-
-            localStorage.setItem("mct-reminders", JSON.stringify(reminders));
-            localStorage.setItem(
-              "mct-reminder-nextId",
-              JSON.stringify(nextId + 1),
+            createReminder(
+              courseId,
+              assignmentName,
+              courseName,
+              day,
+              month,
+              year,
             );
           }
 

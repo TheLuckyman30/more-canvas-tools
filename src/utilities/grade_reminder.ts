@@ -1,4 +1,5 @@
 import { CreateCalendarEvent, Reminder } from "~src/canvas/interfaces";
+import { deleteReminder } from "~src/helpers/reminder-helpers";
 const REMINDER_COLOR = "rgb(211, 241, 185)";
 
 const CLOSE_BUTTON = `
@@ -87,8 +88,8 @@ function createReminderBox(
 
     const updateCalendarEvent = {
       calendar_event: {
-        start_at: `${20}/${3}/${2026}`,
-        end_at: `${20}/${3}/${2026}`,
+        start_at: newDate,
+        end_at: newDate,
       },
     };
 
@@ -119,30 +120,7 @@ function createReminderBox(
   });
 
   $("div#mct-reminder-close").on("click", () => {
-    const storedReminders: Reminder[] = JSON.parse(
-      localStorage.getItem("mct-reminders") ?? "[]",
-    );
-    const newReminders = storedReminders.filter(
-      (reminder) => reminder.id !== id,
-    );
-
-    if (!newReminders.length) {
-      localStorage.setItem("mct-reminder-nextId", "0");
-    }
-    localStorage.setItem("mct-reminders", JSON.stringify(newReminders));
-
-    const token = GM_getValue("CANVAS_TOKEN");
-    fetch(
-      `https://canvas.instructure.com/api/v1/calendar_events/${calendarId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        method: "DELETE",
-      },
-    );
-
+    deleteReminder(id, calendarId);
     reminders.splice(index, 1);
 
     if (!canDisplayNext && canDisplayPrev) {
