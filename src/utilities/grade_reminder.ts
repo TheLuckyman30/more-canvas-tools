@@ -27,7 +27,7 @@ const PREV_BUTTON_HTML = `
 </button>
 `;
 
-function removeReminderFromScreen(
+function updateOnScreenReminder(
   reminders: Reminder[],
   index: number,
   canDisplayNext: boolean,
@@ -91,15 +91,15 @@ function createReminderBox(
     });
   }
 
-  $("button#mct-reminder-later").on("click", async () => {
+  $("button#mct-reminder-later").on("click", () => {
     const newDate = new Date(2026, 2, 20).toLocaleDateString();
     updateReminder(id, newDate, calendarId);
-    removeReminderFromScreen(reminders, index, canDisplayNext, canDisplayPrev);
+    updateOnScreenReminder(reminders, index, canDisplayNext, canDisplayPrev);
   });
 
   $("div#mct-reminder-close").on("click", () => {
     deleteReminder(id, calendarId);
-    removeReminderFromScreen(reminders, index, canDisplayNext, canDisplayPrev);
+    updateOnScreenReminder(reminders, index, canDisplayNext, canDisplayPrev);
   });
 }
 
