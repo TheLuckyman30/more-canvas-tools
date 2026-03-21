@@ -1,5 +1,7 @@
 import { Assignment } from "~src/canvas/interfaces";
 
+
+
 async function modifyAssignments(assignmentsOnPage: JQuery<HTMLElement>) {
   const token = GM_getValue("CANVAS_TOKEN");
   const courseId = window.location.pathname.split("/")[2];
@@ -26,9 +28,9 @@ async function modifyAssignments(assignmentsOnPage: JQuery<HTMLElement>) {
 
     if (fetchedAssignment) {
       const newOption = `
-        <div id="${assignmentId}" style="display: flex;">
-          <option value="${assignmentId}">${assingmentName}</option>
-          <div>-----${fetchedAssignment.published ? "Published" : "Unpublished"}</div>
+        <div id="${assignmentId}" style="display: flex; justify-content: space-between; align-items: left; width:70%">
+          <option value="${assignmentId}" style="overflow: hidden; text-overflow: ellipsis;">${assingmentName}</option>
+          <div style=" padding-right: 2rem;"><p style="color:white; display: inline;">-----</p>${fetchedAssignment.published ? "Published" : "Unpublished"}</div>
         </div>
       `;
       newOptions.push(newOption);
