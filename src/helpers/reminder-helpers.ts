@@ -158,12 +158,25 @@ export function buildReminderInput(opts: {
             <div style="display: flex; justify-content: center; align-items: left; height: 100%; width: 100%; font-family: arial; font-size: 1rem; gap: 0.8rem; flex-direction: column; padding: 1.2rem;  padding-top: 1rem;">
                 <p> Choose Date: </p>
                     ${DATE_INPUT_HTML}
-              
-                    <p style="font-size: 0.8rem; color: #555;">(Optional) Choose Time:</p>
-                
+                    
+                    <div style="justify-content:in-between; display: flex; gap: 0.5rem; align-items: center;">
+
+                      <p style="font-size: 0.8rem; color: #555; border-radius: 1rem; padding-left: 0.3rem; padding-right: 0.3rem; border: 1px solid #555; width: fit-content;" title="Defaults to midnight if no time is selected">
+                        i
+                      </p>
+
+                      <p style="font-size: 0.8rem; color: #555;" title="Defaults to midnight if no time is selected">
+                        (Optional) Choose Time:
+                      </p>
+                      
+                    </div>
                     ${TIME_INPUT_HTML}
+                <p style="margin-top: 1rem; font-size: 0.875rem; color: #6b7280;">
+                  Note: Reminders will only show up when you reload the page
+                </p>
                 
             </div>
+            
             <div style="width: 100%; display: flex; justify-content: left; padding-left: 1.2rem;">
                 ${SUBMIT_BUTTON_HTML}
             </div>
