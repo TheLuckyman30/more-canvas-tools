@@ -134,11 +134,11 @@ export function buildReminderInput(opts: {
    `;
 
   const DATE_INPUT_HTML = `
-    <input id="mct-date-picker" type="date"/>
+    <input id="mct-date-picker" type="date" style="color:black; background-color: #dff6e0; border-radius: 0.375rem; border: 1px solid #d3f1d4; padding: 0.5rem; min-width: 80%; max-width: 80%; display: flex; justify-content: left; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"/>
   `;
 
   const TIME_INPUT_HTML = `
-    <input id="mct-time-picker" type="time"/>
+    <input id="mct-time-picker" type="time" style="color:black; background-color: #dff6e0; border-radius: 0.375rem; border: 1px solid #d3f1d4; padding: 0.5rem; min-width: 80%; max-width: 80%; display: flex; justify-content: left; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"/>
   `;
 
   const SUBMIT_BUTTON_HTML = `
@@ -150,21 +150,24 @@ export function buildReminderInput(opts: {
   const INPUT_CONTAINER_HTML = `
     <div id="mct-input-container"
         style="position: fixed; height: 100%; width: 100%; backdrop-filter: blur(4px); background-color: rgba(167, 163, 163, 0.2); z-index: 99; top: 0; bottom: 0; right: 0; left: 0; display: flex; justify-content: center; align-items: center">
-        <div style="display: flex; flex-direction: column; width: 20rem; height: 15rem; background-color: #ffffff; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.14), 0 10px 10px -5px rgba(0, 0, 0, 0.04) ; padding-bottom: 0.5rem; border-radius: 0.375rem;">
+          <div style="display: flex; flex-direction: column; width: 20rem; height: fit-content; background-color: #ffffff; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.14), 0 10px 10px -5px rgba(0, 0, 0, 0.04) ; padding-bottom: 01rem; border-radius: 0.375rem;">
             <div style="display: flex; justify-content: space-between; font-size: 1.5rem; background-color: #bef1c0; padding: 0.5rem; border-radius: 0.375rem 0.375rem 0 0;">
                 <span style= "font-family: arial">${createOpts ? "Set" : "Update"} Your Reminder:</span>
                 ${CLOSE_BUTTON}
             </div>
-            <div style="display: flex; justify-content: center; align-items: center; height: 100%; width: 100%; font-family: arial; font-size: 1rem; gap: 0.5rem; flex-direction: column; padding: 0.5rem;">
-            Choose Date for Release Reminder:
-            <p></p>
-                ${DATE_INPUT_HTML}
-                ${TIME_INPUT_HTML}
+            <div style="display: flex; justify-content: center; align-items: left; height: 100%; width: 100%; font-family: arial; font-size: 1rem; gap: 0.8rem; flex-direction: column; padding: 1.2rem;  padding-top: 1rem;">
+                <p> Choose Date: </p>
+                    ${DATE_INPUT_HTML}
+              
+                    <p style="font-size: 0.8rem; color: #555;">(Optional) Choose Time:</p>
+                
+                    ${TIME_INPUT_HTML}
+                
             </div>
-            <div style="width: 100%; display: flex; justify-content: center">
+            <div style="width: 100%; display: flex; justify-content: left; padding-left: 1.2rem;">
                 ${SUBMIT_BUTTON_HTML}
             </div>
-        </div>
+          </div>
     </div>
   `;
 
