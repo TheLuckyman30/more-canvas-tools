@@ -45,8 +45,8 @@ How to Use:
 * You can toggle warnings for individual modules by checking/unchecking the checkbox on the rightside in module headers
 
 
-<img src="docs/UpdatedIndicators.png" title="indicators screenshot showing different colored assignments and modules correlating to if theyre published or unpublished, as well as warning for a published assignmemnt in an unpublished module" >
-<img src="docs/AssignmentList.png" title="Assignment list screenshot" >
+<img src="docs/UpdatedIndicators1.png" title="indicators screenshot showing different colored assignments and modules correlating to if theyre published or unpublished, as well as warning for a published assignmemnt in an unpublished module" >
+<img src="docs/AssignmentList1.png" title="Assignment list screenshot" >
 
 
 ## Release Grade Reminder
@@ -64,11 +64,11 @@ How to use it:
 * notification will appear on the day of/ past the reminder date
 * you can reschedule or publish grades via notification if desired
 
-  <img src="docs/ReminderButton.png" title="reminder button in calendar" >
-  <img src="docs/UpdateReminder.png" title="reminder button in calendar" >
-  <img src="docs/ReminderNotif.png" title="unhide reminder notification and show that reminder is in calendar" >
-  <img src="docs/ReminderPopup.png" title="assign date to remind about unhiding assignment popup screenshot" >
-  <img src="docs/sideBar.png" title="reminder sidebar" >
+  <img src="docs/ReminderButton1.png" title="reminder button in calendar" >
+  <img src="docs/UpdateReminder1.png" title="reminder button in calendar" >
+  <img src="docs/ReminderNotif1.png" title="unhide reminder notification and show that reminder is in calendar" >
+  <img src="docs/ReminderPopup1.png" title="assign date to remind about unhiding assignment popup screenshot" >
+  <img src="docs/sideBar1.png" title="reminder sidebar" >
 
 
 ## Activity Report
