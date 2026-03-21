@@ -16,12 +16,6 @@ const REMINDER_SECTION_HTML = `
 </div>
 `;
 
-function trueActiveDate(){ 
-
-
-}
-
-
 function getActiveReminders() {
   const reminders: Reminder[] = JSON.parse(
     localStorage.getItem("mct-reminders") ?? "[]",
@@ -47,14 +41,13 @@ export function injectReminderSideBar(target: HTMLElement) {
   if (reminders.length) {
     const reminderSection = $("div#mct-reminder-section-container");
     for (const reminder of reminders) {
+      const newTargetDate = reminder.targetDate.split(":");
+      const getPMorAM = newTargetDate[2].split(" ");
+      const newDate = newTargetDate[0] + ":" + newTargetDate[1] + getPMorAM[1];
 
-      const newTargetDate= reminder.targetDate.split(":");
-      const getPMorAM= newTargetDate[2].split(" ");
-      const newDate= newTargetDate[0]+":"+newTargetDate[1]+ getPMorAM[1];
-      
       const reminderHtml = `
-      <div style="display:flex;">
-        <div id="mct-reminder-${reminder.id}" style="display: block; unicode-bidi: isolate; min-width: 90%">
+      <div id="mct-reminder-${reminder.id}" style="display:flex;">
+        <div style="display: block; unicode-bidi: isolate; min-width: 90%">
           
           <ul style="display: block; list-style-type: disc; margin-block-start: 0.5em; margin-block-end: 0.5em; padding-inline-start: 10px; unicode-bidi: isolate;">
             <li style="list-style: none;">
