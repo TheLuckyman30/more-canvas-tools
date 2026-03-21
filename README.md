@@ -45,7 +45,7 @@ How to Use:
 * You can toggle warnings for individual modules by checking/unchecking the checkbox on the rightside in module headers
 
 
-<img src="docs/UpdatedIndicators.png" title="indicators screenshot" >
+<img src="docs/UpdatedIndicators.png" title="indicators screenshot showing different colored assignments and modules correlating to if theyre published or unpublished, as well as warning for a published assignmemnt in an unpublished module" >
 <img src="docs/AssignmentList.png" title="Assignment list screenshot" >
 
 
@@ -65,9 +65,10 @@ How to use it:
 * you can reschedule or publish grades via notification if desired
 
   <img src="docs/ReminderButton.png" title="reminder button in calendar" >
+  <img src="docs/UpdateReminder.png" title="reminder button in calendar" >
   <img src="docs/ReminderNotif.png" title="unhide reminder notification and show that reminder is in calendar" >
   <img src="docs/ReminderPopup.png" title="assign date to remind about unhiding assignment popup screenshot" >
-<img src="docs/sideBar.png" title="reminder sidebar" >
+  <img src="docs/sideBar.png" title="reminder sidebar" >
 
 
 ## Activity Report
