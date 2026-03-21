@@ -8,25 +8,31 @@ const REMINDER_COLOR = "rgb(211, 241, 185)";
 
 const CLOSE_BUTTON = `
 <div id="mct-reminder-close"
-     style="cursor: pointer">
+     style="cursor: pointer;">
   X
 </div>
 `;
 
+const PUBLISH_BUTTON_HTML = `
+<button id="mct-publish-grades" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer;  width: 4rem;">
+  Publish
+</button>
+`;
+
 const REMINDER_LATER_BUTTON_HTML = `
-<button id="mct-reminder-later" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; width: max-content; border-radius: 0.375rem; cursor: pointer">
+<button id="mct-reminder-later" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; width: max-content; border-radius: 0.375rem; cursor: pointer;">
   Remind Later
 </button>
 `;
 
 const NEXT_BUTTON_HTML = `
-<button id="mct-next" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; width: 4vw; border-radius: 0.375rem; cursor: pointer">
+<button id="mct-next" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; width: 4vw; border-radius: 0.375rem; cursor: pointer;">
   Next
 </button>
 `;
 
 const PREV_BUTTON_HTML = `
-<button id="mct-prev" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; width: 4vw; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer">
+<button id="mct-prev" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; width: 4vw; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer;">
   Prev
 </button>
 `;
@@ -69,11 +75,17 @@ function createReminderBox(
       <div style="margin-top: 1rem">
         Release the grades for assignment: '${assignmentName}' in course: '${courseName}'
       </div>
-      <div style="display: flex; justify-content: space-between; align-items: center">
-        <button id="mct-publish-grades" style="margin-top: 1rem; background-color: ${REMINDER_COLOR}; border: none; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer;  width: 4rem">
-          Publish
-        </button>  
-        ${REMINDER_LATER_BUTTON_HTML} ${canDisplayPrev ? PREV_BUTTON_HTML : ""} ${canDisplayNext ? NEXT_BUTTON_HTML : ""}
+      <div style="display: flex; align-items: center; width: 100%">
+        <div style="${canDisplayPrev ? "" : "visibility: hidden;"}">
+          ${PREV_BUTTON_HTML}
+        </div>
+        <div style="display: flex; gap: 10px; width: 100%; justify-content: center">
+          ${PUBLISH_BUTTON_HTML}
+          ${REMINDER_LATER_BUTTON_HTML}
+        </div>
+        <div style="${canDisplayNext ? "" : "visibility: hidden;"}">
+          ${NEXT_BUTTON_HTML}
+        </div>
       </div>
     </div>
   `;
