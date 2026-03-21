@@ -45,7 +45,8 @@ How to Use:
 * You can toggle warnings for individual modules by checking/unchecking the checkbox on the rightside in module headers
 
 
-
+<img src="docs/UpdatedIndicators.png" title="indicators screenshot showing different colored assignments and modules correlating to if theyre published or unpublished, as well as warning for a published assignmemnt in an unpublished module" >
+<img src="docs/AssignmentList.png" title="Assignment list screenshot" >
 
 
 ## Release Grade Reminder
