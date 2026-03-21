@@ -86,6 +86,7 @@ function createReminderBox(
         <div style="${canDisplayNext ? "" : "visibility: hidden;"}">
           ${NEXT_BUTTON_HTML}
         </div>
+        
       </div>
     </div>
   `;
