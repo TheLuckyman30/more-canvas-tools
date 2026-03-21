@@ -194,6 +194,8 @@ export interface Reminder {
   qlAssignmentId: string;
 }
 
+// These should have more data in them, but this was the least amount of data needed for the reminder system
+
 export interface CreateCalendarEvent {
   calendar_event: {
     context_code: string;

@@ -1,21 +1,13 @@
 import { Assignment } from "~src/canvas/interfaces";
-
-
+import { fetcher } from "~src/helpers/fetch";
 
 async function modifyAssignments(assignmentsOnPage: JQuery<HTMLElement>) {
-  const token = GM_getValue("CANVAS_TOKEN");
   const courseId = window.location.pathname.split("/")[2];
-  const response = await fetch(
+  const fetchedAssignments: Assignment[] = await fetcher<Assignment[]>(
     `https://canvas.instructure.com/api/v1/courses/${courseId}/assignments`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
   );
-  const fetchedAssignments: Assignment[] = await response.json();
-  const newOptions: string[] = [];
 
+  const newOptions: string[] = [];
   for (const assignment of assignmentsOnPage) {
     const assingmentName = $(assignment).text().split("-")[0];
     let assignmentId = Number($(assignment).val());
