@@ -34,35 +34,35 @@ We are always working on new features, but here's what we have so far:
 ## Published and Unpublished indicators
 
 * The published/ unpublished indicators allow users to easily tell which modules and assignments are published vs not published by color coding them red (unpublished) vs green (published) and marking modules as unpublished in their header. 
-*A warning notification(s) shows up if user has published an assignment in an unpublished module- the notification takes them to the modules page.
+* A warning notification(s) shows up if user has published an assignment in an unpublished module- the notification takes them to the modules page.
+* The list of assignments on the 'add assignment' popup for modules also now shows if they are published or not
+* Warning notifications for individual modules can be toggled on and off
 
-Currently being worked on: 
-* indicators if an assignment is published in the "Add Assignment" pop-up for modules 
-* Specific information on which module warning is coming from in the warning popup
+How to Use: 
+* Headers and side of assignments automatically change color when you unpublish/publish them. 
+* Assignment list on 'add assignment' popup also automatically tells you if an assignment is published or not
+* Warning also shows up automatically when you publish/unpublish them
+* You can toggle warnings for individual modules by checking/unchecking the checkbox on the rightside in module headers
 
-Known issues:
-
-* Users have to refresh the page to see indicators after editing/ creating a module
-* slight delay in color taking hold when page is opened
 
 <img src="docs/UpdatedIndicators.png" title="indicators screenshot" >
+<img src="docs/AssignmentList.png" title="Assignment list screenshot" >
 
 
 ## Release Grade Reminder
 
 The release grade reminders is a workaround for the lack of a 'group release grade' feature- working alongside the existing 'hide grades' feature. 
-* It puts a button on the header of the speedgrader page that allows you to set a reminder to unhide the grades of the assignment the speedgrader is open for.
-*  It then adds the reminder as an event in the built in canvas calendar
+* It puts a button on the header of the speedgrader page that allows you to set a reminder (via date and, optionally, time) to unhide the grades of the assignment the    speedgrader is open for.
+*  It then adds the reminder as an event in the built in canvas calendar, reminder also automatically deletes itself after reminder is dealt with 
 *  On the day/ past the day of the set reminder, it will give you a warning notification to unhide the grades with a button that takes you to the gradebook.
+* You can publish grades straight from the notification, see all notifications via prev or next buttons, or reschedule the notification
+* Warning notification does not disappear until it is interacted with, forcing the instructor to be reminded 
 *  Reminder also shows up on the dashboard on the right hand side bar
 
-Currently being worked on:
-* Adding a specific time option in the calendar, instead of just date
-* UI tweaks for right-hand sidebar
-* Reminder notification doesnt disappear after reloading/ navigating to another page 
-
-Known issues:
-* set reminder button can have a delay to load
+How to use it:
+* Press the remind button on the autograder and set a date and time to be reminded
+* notification will appear on the day of/ past the reminder date
+* you can reschedule or publish grades via notification if desired
 
   <img src="docs/ReminderButton.png" title="reminder button in calendar" >
   <img src="docs/ReminderNotif.png" title="unhide reminder notification and show that reminder is in calendar" >
